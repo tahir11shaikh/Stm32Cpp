@@ -25,6 +25,10 @@ extern "C" {
 #include "stm32g4xx_hal.h"
 /* USER CODE END Includes */
 
+/* Exported macro ------------------------------------------------------------*/
+/* USER CODE BEGIN EM */
+/* USER CODE END EM */
+
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 typedef enum
@@ -40,7 +44,10 @@ typedef enum
 
 	GPO_PIN_MaxCnt,
 } GPO_PinTypeDef;
+/* USER CODE END ET */
 
+/* Global variable -----------------------------------------------------------*/
+/* USER CODE BEGIN GV */
 class GPIO_CLASS
 {
 	public:
@@ -67,23 +74,11 @@ class GPIO_CLASS
 		HAL_PinState GPO_PinToggle(GPO_PinTypeDef enPinTypeDef);
 		HAL_PinState GPI_PinGetLevel(GPI_PinTypeDef enPinTypeDef);
 };
-/* USER CODE END ET */
-
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
-/* USER CODE END EC */
-
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-/* USER CODE END EM */
+/* USER CODE END GV */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */
 /* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-/* USER CODE BEGIN Private defines */
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

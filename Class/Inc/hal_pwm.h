@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : hal_adc.h
+  * @file           : hal_pwm.h
   * Created on      : 02-03-2024
   * Author          : Tahir.Shaikh
   * @brief          : Source/Header file
@@ -10,8 +10,8 @@
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef CLASS_INC_HAL_ADC_H_
-#define CLASS_INC_HAL_ADC_H_
+#ifndef CLASS_INC_HAL_PWM_H_
+#define CLASS_INC_HAL_PWM_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,52 +27,40 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
+#define MIN_DUTY_CYCLE 0
+#define MAX_DUTY_CYCLE 100
 /* USER CODE END EM */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 typedef enum
 {
-	ADC_Sensor_1,
+	PWM_PIN_1,
 
-	ADC_PIN_MaxCnt,
-} ADC_PinTypeDef;
+	PWM_PIN_MaxCnt,
+} PWM_PinTypeDef;
 /* USER CODE END ET */
 
 /* Global variable -----------------------------------------------------------*/
 /* USER CODE BEGIN GV */
-class ADC_CLASS
+class PWM_CLASS
 {
 	public:
 		// Internal Declaration
-		ADC_CLASS();
-		virtual ~ADC_CLASS();
+		PWM_CLASS();
+		virtual ~PWM_CLASS();
 
 		// Variable Declaration
 		struct
 		{
-			struct
-			{
-				HAL_PinState enPinState[ADC_PIN_MaxCnt];
-			} stAin;
-		} stIO;
-
-		uint32_t u32ChannelValue[ADC_PIN_MaxCnt];
-
-		struct
-		{
-			struct
-			{
-				uint8_t u8ChannelCnt;
-				HAL_FunState enAdcDmaStatus;
-				uint32_t u32ChannelValue[ADC_PIN_MaxCnt];
-			} stADC;
-		} stDMA;
+			HAL_ApiState enPwmPinStart[PWM_PIN_MaxCnt];
+			HAL_ApiState enPwmPinStop[PWM_PIN_MaxCnt];
+		} stStatus;
 
 		// Methods Declaration
-		HAL_FunState ADC_StartDMA(void);
-		uint32_t ADC_ReadSingleChannelDMA(ADC_PinTypeDef enPinTypeDef);
-		uint32_t ADC_ReadSingleChannelPoll(ADC_PinTypeDef enPinTypeDef);
+		HAL_ApiState PWM_Start(PWM_PinTypeDef enPinTypeDef);
+		HAL_ApiState PWM_Stop(PWM_PinTypeDef enPinTypeDef);
+		HAL_ApiState PWM_SetDutyCycle(PWM_PinTypeDef enPinTypeDef, uint8_t ucDutyCycle);
 };
 /* USER CODE END GV */
 
@@ -84,4 +72,4 @@ class ADC_CLASS
 }
 #endif
 
-#endif /* CLASS_INC_HAL_ADC_H_ */
+#endif /* CLASS_INC_HAL_PWM_H_ */

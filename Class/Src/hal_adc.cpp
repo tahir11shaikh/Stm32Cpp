@@ -38,8 +38,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-extern ADC_HandleTypeDef hadc1;
-
 // Instance Declaration
 ADC_CLASS clADC;
 
@@ -57,6 +55,7 @@ ADC_CLASS::~ADC_CLASS() {
 
 /* External variables --------------------------------------------------------*/
 /* USER CODE BEGIN EV */
+extern ADC_HandleTypeDef hadc1;
 /* USER CODE END EV */
 
 /* functions --------------------------------------------------------*/
@@ -110,12 +109,18 @@ uint32_t ADC_CLASS::ADC_ReadSingleChannelPoll(ADC_PinTypeDef enPinTypeDef)
 {
 	ADC_ChannelConfTypeDef sConfig = {0};
 
-	if (enPinTypeDef == ADC_Sensor_1)
-	{
-		sConfig.Channel = ADC_CHANNEL_1;
-		sConfig.Rank = ADC_REGULAR_RANK_1;
-		sConfig.SamplingTime = ADC_SAMPLETIME_92CYCLES_5;
-	}
+    switch(enPinTypeDef)
+    {
+        case ADC_Sensor_1:
+    		sConfig.Channel = ADC_CHANNEL_1;
+    		sConfig.Rank = ADC_REGULAR_RANK_1;
+    		sConfig.SamplingTime = ADC_SAMPLETIME_92CYCLES_5;
+            break;
+
+        case ADC_PIN_MaxCnt:
+        default:
+            break;
+    }
 
 	/* Configure Regular Channel */
 	sConfig.SingleDiff = ADC_SINGLE_ENDED;
