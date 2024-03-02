@@ -361,11 +361,12 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
-  clADC.ADC_StartDMA();
+  //clADC.ADC_StartDMA();
   /* Infinite loop */
   for(;;)
   {
-    SWV_Print("ADC Ch1 val:%d\n",clADC.ADC_ReadSingleChannel(ADC_Sensor_1));
+    //SWV_Print("ADC Ch1 val:%d\n", clADC.ADC_ReadSingleChannelDMA(ADC_Sensor_1));
+    //SWV_Print("ADC Ch1 val:%d\n", clADC.ADC_ReadSingleChannelPoll(ADC_Sensor_1));
     osDelay(500);
   }
   /* USER CODE END 5 */

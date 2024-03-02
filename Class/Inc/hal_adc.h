@@ -43,25 +43,28 @@ class ADC_CLASS
 
 		struct
 		{
-		    struct
-		    {
-		    	HAL_PinState enPinState[ADC_PIN_MaxCnt];
-		    } stAin;
+			struct
+			{
+				HAL_PinState enPinState[ADC_PIN_MaxCnt];
+			} stAin;
 		} stIO;
+
+		uint32_t u32ChannelValue[ADC_PIN_MaxCnt];
 
 		struct
 		{
 			struct
 			{
-				uint8_t u8AdcDmaChannelCnt;
+				uint8_t u8ChannelCnt;
 				HAL_FunState enAdcDmaStatus;
-				uint32_t u32AdcDmaResult[ADC_PIN_MaxCnt];
+				uint32_t u32ChannelValue[ADC_PIN_MaxCnt];
 			} stADC;
 		} stDMA;
 
 		// Methods Declaration
 		HAL_FunState ADC_StartDMA(void);
-		uint32_t ADC_ReadSingleChannel(ADC_PinTypeDef enPinTypeDef);
+		uint32_t ADC_ReadSingleChannelDMA(ADC_PinTypeDef enPinTypeDef);
+		uint32_t ADC_ReadSingleChannelPoll(ADC_PinTypeDef enPinTypeDef);
 };
 /* USER CODE END ET */
 
