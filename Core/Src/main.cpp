@@ -290,16 +290,21 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    // GPIO High/Low Toggle Example 
-    clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_HIGH);
-    osDelay(500);
-    clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_LOW);
-    osDelay(500);
-
-    // GPIO Toggle Example 
-    clGPIO.GPO_vPinToggle(GPO_PIN_PA5);
-    osDelay(500);
     SWV_Print(__FILE__, __LINE__, __func__, "Hello from Task1\n");
+
+    /* Example: GPIO Pin Set (High/Low) */
+    //clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_HIGH);
+    //osDelay(500);
+    //clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_LOW);
+    //osDelay(500);
+
+    /* Example: GPIO Pin Toggle */
+    //clGPIO.GPO_vPinToggle(GPO_PIN_PA5);
+
+    /* Example: GPIO Pin Read */
+    clGPIO.GPI_bPinGetLevel(GPI_PIN_PC13);
+
+    osDelay(100);
   }
   /* USER CODE END 5 */
 }
