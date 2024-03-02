@@ -13,7 +13,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <hal_rtc.h>
+#include <hal_rtc.hpp>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,9 +78,9 @@ HAL_ApiState RTC_CLASS::RTC_vSetTimeDate()
 	stSetDate.WeekDay = RTC_WEEKDAY_MONDAY;
 	if (HAL_RTC_SetDate(&hrtc, &this->stSetDate, RTC_FORMAT_BCD) != HAL_OK)
 	{
-		this->stState.enSetTime = HAL_FAIL;
+		this->stState.enSetDate = HAL_FAIL;
 	} else {
-		this->stState.enSetTime = HAL_SUCCESS;
+		this->stState.enSetDate = HAL_SUCCESS;
 	}
 
 	// backup register
@@ -111,12 +111,12 @@ HAL_ApiState RTC_CLASS::RTC_vGetTimeDate()
 	// Get the RTC current Date
 	if (HAL_RTC_GetDate(&hrtc, &this->stGetDate, RTC_FORMAT_BIN) != HAL_OK)
 	{
-		this->stState.enGetTime = HAL_FAIL;
+		this->stState.enGetDate = HAL_FAIL;
 	} else {
-		this->stState.enGetTime = HAL_SUCCESS;
+		this->stState.enGetDate = HAL_SUCCESS;
 	}
 
-	if (this->stState.enSetTime != HAL_FAIL && this->stState.enSetDate != HAL_FAIL)
+	if (this->stState.enSetTime != HAL_FAIL && this->stState.enGetDate != HAL_FAIL)
 	{
 		return HAL_SUCCESS;
 	} else {

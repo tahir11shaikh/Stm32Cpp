@@ -13,7 +13,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <hal_pwm.h>
+#include <hal_pwm.hpp>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

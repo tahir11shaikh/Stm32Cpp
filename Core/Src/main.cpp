@@ -17,15 +17,16 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+
 #include "main.h"
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <hal_gpio.h>
-#include <hal_adc.h>
-#include <hal_pwm.h>
-#include <hal_rtc.h>
+#include <hal_gpio.hpp>
+#include <hal_adc.hpp>
+#include <hal_pwm.hpp>
+#include <hal_rtc.hpp>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
