@@ -274,7 +274,21 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+static void Example_GPIO_Class(void)
+{
+    /* Example: GPIO Pin Set (High/Low) */
+//    clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_HIGH);
+//    osDelay(200);
+//    clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_LOW);
+//    osDelay(200);
 
+    /* Example: GPIO Pin Toggle */
+    clGPIO.GPO_vPinToggle(GPO_PIN_PA5);
+    osDelay(200);
+
+    /* Example: GPIO Pin Read */
+    clGPIO.GPI_bPinGetLevel(GPI_PIN_PC13);
+}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -291,19 +305,7 @@ void StartDefaultTask(void const * argument)
   for(;;)
   {
     SWV_Print(__FILE__, __LINE__, __func__, "Hello from Task1\n");
-
-    /* Example: GPIO Pin Set (High/Low) */
-    //clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_HIGH);
-    //osDelay(500);
-    //clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_LOW);
-    //osDelay(500);
-
-    /* Example: GPIO Pin Toggle */
-    //clGPIO.GPO_vPinToggle(GPO_PIN_PA5);
-
-    /* Example: GPIO Pin Read */
-    clGPIO.GPI_bPinGetLevel(GPI_PIN_PC13);
-
+    Example_GPIO_Class();
     osDelay(100);
   }
   /* USER CODE END 5 */

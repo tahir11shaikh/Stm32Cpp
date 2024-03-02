@@ -81,9 +81,7 @@ HAL_PinState GPIO_CLASS::GPO_vPinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinSt
         case GPO_PIN_MaxCnt:
             break;
     }
-    // Update class variable
-    stIO.stDout.PinState[enPinTypeDef] = enPinState;
-    return stIO.stDout.PinState[enPinTypeDef];
+    return stIO.stDout.PinState[enPinTypeDef] = enPinState;
 }
 
 /**
@@ -102,8 +100,7 @@ HAL_PinState GPIO_CLASS::GPO_vPinToggle(GPO_PinTypeDef enPinTypeDef)
         case GPO_PIN_MaxCnt:
             break;
     }
-    stIO.stDout.PinState[enPinTypeDef] = (stIO.stDout.PinState[enPinTypeDef] == HAL_PIN_LOW) ? HAL_PIN_HIGH : HAL_PIN_LOW;
-    return stIO.stDout.PinState[enPinTypeDef];
+    return stIO.stDout.PinState[enPinTypeDef] = (stIO.stDout.PinState[enPinTypeDef] == HAL_PIN_LOW) ? HAL_PIN_HIGH : HAL_PIN_LOW;
 }
 
 /**
@@ -123,8 +120,6 @@ HAL_PinState GPIO_CLASS::GPI_bPinGetLevel(GPI_PinTypeDef enPinTypeDef)
         case GPI_PIN_MaxCnt:
             break;
     }
-    // Update class variable
-    stIO.stDIn.PinState[enPinTypeDef] = enPinState;
-    return enPinState;
+    return stIO.stDIn.PinState[enPinTypeDef] = enPinState;
 }
 
