@@ -27,6 +27,7 @@
 #include <hal_adc.hpp>
 #include <hal_pwm.hpp>
 #include <hal_rtc.hpp>
+#include <hal_flash.hpp>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,6 +62,7 @@ extern GPIO_CLASS clGPIO;
 extern ADC_CLASS clADC;
 extern PWM_CLASS clPWM;
 extern RTC_CLASS clRTC;
+extern FLASH_CLASS clFLASH;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -523,18 +525,16 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
-  clRTC.stSetTime.Hours=0;
-  clRTC.stSetTime.Minutes=0;
-  clRTC.stSetTime.Seconds=0;
-  clRTC.stSetDate.Date=0x1;
-  clRTC.stSetDate.Month=RTC_MONTH_JANUARY;
-  clRTC.stSetDate.Year=0x24;
-  clRTC.RTC_vSetTimeDate();
+	uint8_t u8WrData[] = {0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xA,0xB,0xC,0xD,0xE,0xF};
+	uint8_t u8RdData[sizeof(u8WrData)];
+
+	clFLASH.FLASH_MemEraseByPage(0x0803F800);
+	clFLASH.FLASH_MemWriteData(0x0803F800, (uint8_t *)u8WrData, sizeof(u8WrData));
+	clFLASH.FLASH_MemReadData(0x0803F800, u8RdData, sizeof(u8RdData));
   /* Infinite loop */
   for(;;)
   {
-	  clRTC.RTC_vGetTimeDate();
-      osDelay(500);
+	    osDelay(500);
   }
   /* USER CODE END 5 */
 }

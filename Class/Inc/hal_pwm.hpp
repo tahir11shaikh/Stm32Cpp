@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : hal_pwm.h
+  * @file           : hal_pwm.hpp
   * Created on      : 02-03-2024
   * Author          : Tahir.Shaikh
   * @brief          : Source/Header file

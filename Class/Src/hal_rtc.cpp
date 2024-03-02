@@ -83,8 +83,6 @@ HAL_ApiState RTC_CLASS::RTC_vSetTimeDate()
 		this->stState.enSetDate = HAL_SUCCESS;
 	}
 
-	// backup register
-	HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, 0x32F2);
 	if (this->stState.enSetTime != HAL_FAIL && this->stState.enSetDate != HAL_FAIL)
 	{
 		return HAL_SUCCESS;
