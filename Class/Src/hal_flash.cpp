@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file           : hal_flash.cpp
-  * Created on      : 24-09-2023
+  * Created on      : 03-03-2024
   * Author          : Tahir.Shaikh
   * @brief          : Source/Header file
   ******************************************************************************
@@ -108,36 +108,6 @@ HAL_ApiState FLASH_CLASS::FLASH_MemEraseByPage(const uint32_t u32MemAdd)
   * @param  u32MemAdd,pData,u16DataLen
   * @retval HAL_ApiState
   */
-//HAL_ApiState FLASH_CLASS::FLASH_MemWriteData(uint32_t u32MemAdd, uint64_t *pData, uint16_t u16DataLen)
-//{
-//
-//    // Erase the specified Flash page
-//	this->FLASH_MemEraseByPage(u32MemAdd);
-//
-//    // Unlock the Flash to enable the flash control register access.
-//    HAL_FLASH_Unlock();
-//
-//    for (uint32_t i = 0; i < u16DataLen; i++)
-//    {
-//        // Calculate the current address where the data should be written.
-//        uint32_t u32MemAddCurrent = u32MemAdd + (i * sizeof(uint64_t));
-//
-//        // Program the data into flash memory.
-//        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, u32MemAddCurrent, pData[i]) != HAL_OK)
-//        {
-//            // If an error occurred during the flash program operation, lock the flash and return an error.
-//            HAL_FLASH_GetError(); // Consider storing the error code if needed for debugging.
-//            HAL_FLASH_Lock();
-//            return HAL_FAIL;
-//        }
-//    }
-//
-//    // Lock the Flash to disable the flash control register access.
-//    HAL_FLASH_Lock();
-//
-//    return HAL_SUCCESS;
-//}
-
 HAL_ApiState FLASH_CLASS::FLASH_MemWriteData(uint32_t u32MemAdd, uint8_t *pData, uint16_t u16DataLen)
 {
 	uint32_t i = 0;

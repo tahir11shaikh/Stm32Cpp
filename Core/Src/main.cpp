@@ -525,12 +525,7 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
-	uint8_t u8WrData[] = {0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xA,0xB,0xC,0xD,0xE,0xF};
-	uint8_t u8RdData[sizeof(u8WrData)];
 
-	clFLASH.FLASH_MemEraseByPage(0x0803F800);
-	clFLASH.FLASH_MemWriteData(0x0803F800, (uint8_t *)u8WrData, sizeof(u8WrData));
-	clFLASH.FLASH_MemReadData(0x0803F800, u8RdData, sizeof(u8RdData));
   /* Infinite loop */
   for(;;)
   {
