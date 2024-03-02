@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <hal_gpio.h>
+#include <hal_adc.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,57 +42,43 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
+
 osThreadId defaultTaskHandle;
 osThreadId myTask02Handle;
 osMutexId myMutex01Handle;
 osMutexId myMutex02Handle;
 /* USER CODE BEGIN PV */
 extern GPIO_CLASS clGPIO;
+extern ADC_CLASS clADC;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
+static void MX_ADC1_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
 
 /* USER CODE BEGIN PFP */
-#define SWV_BUFFER_SIZE 128 // Adjust this size based on your needs and available memory
-int SWV_Print(const char *file, int line, const char *function, const char *format, ...)
+int SWV_Print(const char *format, ...)
 {
-    char buffer[SWV_BUFFER_SIZE];
-    int header_len, total_len;
+    char buffer[64];
     va_list args;
-
-    // Print the file, line, and function information into the buffer
-    header_len = snprintf(buffer, SWV_BUFFER_SIZE, "[file:%s][line:%d][fun:%s()] - ", file, line, function);
-    if (header_len < 0) {
-        return -1; // snprintf encountered an error
-    }
-
-    // Start processing the variable arguments
     va_start(args, format);
+
     // vsnprintf returns the number of characters that would have been written
-    // if the buffer had been large enough, not counting the terminating null character.
-    total_len = vsnprintf(buffer + header_len, SWV_BUFFER_SIZE - header_len, format, args);
-    if (total_len < 0) {
-        va_end(args);
-        return -1; // vsnprintf encountered an error
+    int ret = vsnprintf(buffer, sizeof(buffer), format, args);
+    if (ret > 0) {
+        for (int i = 0; i < ret && buffer[i] != '\0'; i++) {
+            ITM_SendChar(buffer[i]);
+        }
     }
     va_end(args);
 
-    total_len += header_len; // Total length of the final string
-    if (total_len >= SWV_BUFFER_SIZE) {
-        // The output was truncated
-        total_len = SWV_BUFFER_SIZE - 1; // Ensure the string is null-terminated
-    }
-
-    // Send the formatted string character by character
-    for (int i = 0; i < total_len; i++) {
-        ITM_SendChar(buffer[i]);
-    }
-
-    return total_len; // Return the total length of the string sent
+    return ret;
 }
 
 /* USER CODE END PFP */
@@ -129,6 +116,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -239,6 +228,91 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_MultiModeTypeDef multimode = {0};
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Common config
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.GainCompensation = 0;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc1.Init.LowPowerAutoWait = DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
+  hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+  hadc1.Init.OversamplingMode = DISABLE;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure the ADC multi-mode
+  */
+  multimode.Mode = ADC_MODE_INDEPENDENT;
+  if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_92CYCLES_5;
+  sConfig.SingleDiff = ADC_SINGLE_ENDED;
+  sConfig.OffsetNumber = ADC_OFFSET_NONE;
+  sConfig.Offset = 0;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMAMUX1_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -274,21 +348,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-static void Example_GPIO_Class(void)
-{
-    /* Example: GPIO Pin Set (High/Low) */
-//    clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_HIGH);
-//    osDelay(200);
-//    clGPIO.GPO_vPinSetLevel(GPO_PIN_PA5, HAL_PIN_LOW);
-//    osDelay(200);
 
-    /* Example: GPIO Pin Toggle */
-    clGPIO.GPO_vPinToggle(GPO_PIN_PA5);
-    osDelay(200);
-
-    /* Example: GPIO Pin Read */
-    clGPIO.GPI_bPinGetLevel(GPI_PIN_PC13);
-}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -301,12 +361,12 @@ static void Example_GPIO_Class(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
+  clADC.ADC_StartDMA();
   /* Infinite loop */
   for(;;)
   {
-    SWV_Print(__FILE__, __LINE__, __func__, "Hello from Task1\n");
-    Example_GPIO_Class();
-    osDelay(100);
+    SWV_Print("ADC Ch1 val:%d\n",clADC.ADC_ReadSingleChannel(ADC_Sensor_1));
+    osDelay(500);
   }
   /* USER CODE END 5 */
 }
@@ -324,8 +384,7 @@ void StartTask02(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    SWV_Print(__FILE__, __LINE__, __func__, "Hello from Task2\n");
-    osDelay(1000);
+    osDelay(100);
   }
   /* USER CODE END StartTask02 */
 }

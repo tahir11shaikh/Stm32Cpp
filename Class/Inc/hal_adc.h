@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : hal_gpio.h
+  * @file           : hal_adc.h
   * Created on      : 02-03-2024
   * Author          : Tahir.Shaikh
   * @brief          : Source/Header file
@@ -10,8 +10,8 @@
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef CLASS_INC_HAL_GPIO_H_
-#define CLASS_INC_HAL_GPIO_H_
+#ifndef CLASS_INC_HAL_ADC_H_
+#define CLASS_INC_HAL_ADC_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,43 +29,39 @@ extern "C" {
 /* USER CODE BEGIN ET */
 typedef enum
 {
-	GPI_PIN_PC13=0,
+	ADC_Sensor_1,
 
-	GPI_PIN_MaxCnt,
-} GPI_PinTypeDef;
+	ADC_PIN_MaxCnt,
+} ADC_PinTypeDef;
 
-typedef enum
-{
-	GPO_PIN_PA5=0,
-
-	GPO_PIN_MaxCnt,
-} GPO_PinTypeDef;
-
-class GPIO_CLASS
+class ADC_CLASS
 {
 	public:
 		// Internal Declaration
-		GPIO_CLASS();
-		virtual ~GPIO_CLASS();
+		ADC_CLASS();
+		virtual ~ADC_CLASS();
 
-		// Variable Declaration
 		struct
 		{
 		    struct
 		    {
-		    	HAL_PinState enPinState[GPI_PIN_MaxCnt];
-		    } stDIn;
-
-			struct
-			{
-		    	HAL_PinState enPinState[GPO_PIN_MaxCnt];
-			} stDout;
+		    	HAL_PinState enPinState[ADC_PIN_MaxCnt];
+		    } stAin;
 		} stIO;
 
+		struct
+		{
+			struct
+			{
+				uint8_t u8AdcDmaChannelCnt;
+				HAL_FunState enAdcDmaStatus;
+				uint32_t u32AdcDmaResult[ADC_PIN_MaxCnt];
+			} stADC;
+		} stDMA;
+
 		// Methods Declaration
-		HAL_PinState GPO_PinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinState enPinState);
-		HAL_PinState GPO_PinToggle(GPO_PinTypeDef enPinTypeDef);
-		HAL_PinState GPI_PinGetLevel(GPI_PinTypeDef enPinTypeDef);
+		HAL_FunState ADC_StartDMA(void);
+		uint32_t ADC_ReadSingleChannel(ADC_PinTypeDef enPinTypeDef);
 };
 /* USER CODE END ET */
 
@@ -89,4 +85,4 @@ class GPIO_CLASS
 }
 #endif
 
-#endif /* CLASS_INC_HAL_GPIO_H_ */
+#endif /* CLASS_INC_HAL_ADC_H_ */

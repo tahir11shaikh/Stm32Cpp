@@ -13,7 +13,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#include <../Inc/hal_gpio.h>
 #include <hal_gpio.h>
 /* USER CODE END Includes */
 
@@ -45,12 +44,12 @@ GPIO_CLASS clGPIO;
 GPIO_CLASS::GPIO_CLASS() {
     // Initialize all PinConfig in stDIn with HAL_PIN_LOW
     for (int i = 0; i < GPI_PIN_MaxCnt; i++) {
-        stIO.stDIn.PinState[i] = HAL_PIN_LOW;
+        stIO.stDIn.enPinState[i] = HAL_PIN_LOW;
     }
 
     // Initialize all PinConfig in stDout with HAL_PIN_LOW
     for (int i = 0; i < GPO_PIN_MaxCnt; i++) {
-        stIO.stDout.PinState[i] = HAL_PIN_LOW;
+        stIO.stDout.enPinState[i] = HAL_PIN_LOW;
     }
 }
 
@@ -70,7 +69,7 @@ GPIO_CLASS::~GPIO_CLASS() {
   * @param  GPIO_PinTypeDef
   * @retval HAL_PinState
   */
-HAL_PinState GPIO_CLASS::GPO_vPinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinState enPinState)
+HAL_PinState GPIO_CLASS::GPO_PinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinState enPinState)
 {
     switch(enPinTypeDef)
     {
@@ -81,7 +80,7 @@ HAL_PinState GPIO_CLASS::GPO_vPinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinSt
         case GPO_PIN_MaxCnt:
             break;
     }
-    return stIO.stDout.PinState[enPinTypeDef] = enPinState;
+    return stIO.stDout.enPinState[enPinTypeDef] = enPinState;
 }
 
 /**
@@ -89,7 +88,7 @@ HAL_PinState GPIO_CLASS::GPO_vPinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinSt
   * @param  GPIO_PinTypeDef: Pin to be toggled.
   * @retval HAL_PinState
   */
-HAL_PinState GPIO_CLASS::GPO_vPinToggle(GPO_PinTypeDef enPinTypeDef)
+HAL_PinState GPIO_CLASS::GPO_PinToggle(GPO_PinTypeDef enPinTypeDef)
 {
     switch(enPinTypeDef)
     {
@@ -100,7 +99,7 @@ HAL_PinState GPIO_CLASS::GPO_vPinToggle(GPO_PinTypeDef enPinTypeDef)
         case GPO_PIN_MaxCnt:
             break;
     }
-    return stIO.stDout.PinState[enPinTypeDef] = (stIO.stDout.PinState[enPinTypeDef] == HAL_PIN_LOW) ? HAL_PIN_HIGH : HAL_PIN_LOW;
+    return stIO.stDout.enPinState[enPinTypeDef] = (stIO.stDout.enPinState[enPinTypeDef] == HAL_PIN_LOW) ? HAL_PIN_HIGH : HAL_PIN_LOW;
 }
 
 /**
@@ -108,7 +107,7 @@ HAL_PinState GPIO_CLASS::GPO_vPinToggle(GPO_PinTypeDef enPinTypeDef)
   * @param  GPI_PinTypeDef
   * @retval HAL_PinState
   */
-HAL_PinState GPIO_CLASS::GPI_bPinGetLevel(GPI_PinTypeDef enPinTypeDef)
+HAL_PinState GPIO_CLASS::GPI_PinGetLevel(GPI_PinTypeDef enPinTypeDef)
 {
     HAL_PinState enPinState = HAL_PIN_LOW;
     switch(enPinTypeDef)
@@ -120,6 +119,6 @@ HAL_PinState GPIO_CLASS::GPI_bPinGetLevel(GPI_PinTypeDef enPinTypeDef)
         case GPI_PIN_MaxCnt:
             break;
     }
-    return stIO.stDIn.PinState[enPinTypeDef] = enPinState;
+    return stIO.stDIn.enPinState[enPinTypeDef] = enPinState;
 }
 
