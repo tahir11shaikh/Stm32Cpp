@@ -72,18 +72,38 @@ GPIO_CLASS::~GPIO_CLASS() {
   */
 HAL_PinState GPIO_CLASS::GPO_vPinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinState enPinState)
 {
-	switch(enPinTypeDef)
-	{
-		case GPO_PIN_PA5:
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, (GPIO_PinState)enPinState);
-			break;
+    switch(enPinTypeDef)
+    {
+        case GPO_PIN_PA5:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, (GPIO_PinState)enPinState);
+            break;
 
-		case GPO_PIN_MaxCnt:
-			break;
-	}
-	// Update class variable
-	stIO.stDout.PinState[enPinTypeDef] = enPinState;
-	return enPinState;
+        case GPO_PIN_MaxCnt:
+            break;
+    }
+    // Update class variable
+    stIO.stDout.PinState[enPinTypeDef] = enPinState;
+    return stIO.stDout.PinState[enPinTypeDef];
+}
+
+/**
+  * @brief  This function is used to toggle the state of a PIN.
+  * @param  GPIO_PinTypeDef: Pin to be toggled.
+  * @retval HAL_PinState
+  */
+HAL_PinState GPIO_CLASS::GPO_vPinToggle(GPO_PinTypeDef enPinTypeDef)
+{
+    switch(enPinTypeDef)
+    {
+        case GPO_PIN_PA5:
+            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+            break;
+
+        case GPO_PIN_MaxCnt:
+            break;
+    }
+    stIO.stDout.PinState[enPinTypeDef] = (stIO.stDout.PinState[enPinTypeDef] == HAL_PIN_LOW) ? HAL_PIN_HIGH : HAL_PIN_LOW;
+    return stIO.stDout.PinState[enPinTypeDef];
 }
 
 /**
@@ -93,18 +113,18 @@ HAL_PinState GPIO_CLASS::GPO_vPinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinSt
   */
 HAL_PinState GPIO_CLASS::GPI_bPinGetLevel(GPI_PinTypeDef enPinTypeDef)
 {
-	HAL_PinState enPinState = HAL_PIN_LOW;
-	switch(enPinTypeDef)
-	{
-		case GPI_PIN_PC13:
-			enPinState = (HAL_PinState)HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
-			break;
+    HAL_PinState enPinState = HAL_PIN_LOW;
+    switch(enPinTypeDef)
+    {
+        case GPI_PIN_PC13:
+            enPinState = (HAL_PinState)HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
+            break;
 
-		case GPI_PIN_MaxCnt:
-			break;
-	}
-	// Update class variable
-	stIO.stDIn.PinState[enPinTypeDef] = enPinState;
-	return enPinState;
+        case GPI_PIN_MaxCnt:
+            break;
+    }
+    // Update class variable
+    stIO.stDIn.PinState[enPinTypeDef] = enPinState;
+    return enPinState;
 }
 

@@ -64,6 +64,7 @@ class GPIO_CLASS
 
 		// Methods Declaration
 		HAL_PinState GPO_vPinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinState enPinState);
+		HAL_PinState GPO_vPinToggle(GPO_PinTypeDef enPinTypeDef);
 		HAL_PinState GPI_bPinGetLevel(GPI_PinTypeDef enPinTypeDef);
 };
 /* USER CODE END ET */
