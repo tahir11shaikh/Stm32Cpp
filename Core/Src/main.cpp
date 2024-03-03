@@ -109,19 +109,19 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 
   if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
   {
-    HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &clCAN.stVar.stRxCanMsg.RxHeader, RxData);
-    if (clCAN.stVar.stRxCanMsg.RxHeader.IdType == FDCAN_STANDARD_ID)
+    HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &clCAN.stVar.stCanRxMsg.RxHeader, RxData);
+    if (clCAN.stVar.stCanRxMsg.RxHeader.IdType == FDCAN_STANDARD_ID)
     {
-      clCAN.stVar.stRxCanMsg.u32CanId = clCAN.stVar.stRxCanMsg.RxHeader.Identifier;
-      clCAN.stVar.stRxCanMsg.u32CanDlc = (clCAN.stVar.stRxCanMsg.RxHeader.DataLength == FDCAN_DLC_BYTES_8) ? 8u : clCAN.stVar.stRxCanMsg.RxHeader.DataLength;
+      clCAN.stVar.stCanRxMsg.u32CanId = clCAN.stVar.stCanRxMsg.RxHeader.Identifier;
+      clCAN.stVar.stCanRxMsg.u32CanDlc = (clCAN.stVar.stCanRxMsg.RxHeader.DataLength == FDCAN_DLC_BYTES_8) ? 8u : clCAN.stVar.stCanRxMsg.RxHeader.DataLength;
 
       for (uint8_t idx=0; idx<8u; ++idx)
       {
-        clCAN.stVar.stRxCanMsg.u8CanData[idx] = RxData[idx];
+        clCAN.stVar.stCanRxMsg.u8CanData[idx] = RxData[idx];
       }
 
       // Increment the receive count
-      clCAN.stVar.stRxCanMsg.u64RxSentCounter++;
+      clCAN.stVar.stCanRxMsg.u64RxSentCounter++;
 
       // Re-Enable RX Interrupt
       HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
@@ -130,7 +130,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 }
 void HAL_FDCAN_TxFifoEmptyCallback(FDCAN_HandleTypeDef *hfdcan)
 {
-  ++clCAN.stVar.stTxCanMsg.u64TxSentCounter;
+  ++clCAN.stVar.stCanTxMsg.u64TxSentCounter;
 }
 /* USER CODE END 0 */
 
@@ -605,20 +605,20 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
-  clCAN.stVar.stTxCanMsg.u32CanId=0x123;
-  clCAN.stVar.stTxCanMsg.u32CanDlc=0x8;
-  clCAN.stVar.stTxCanMsg.u8CanData[0]=0x88;
-  clCAN.stVar.stTxCanMsg.u8CanData[1]=0x99;
-  clCAN.stVar.stTxCanMsg.u8CanData[2]=0xAA;
-  clCAN.stVar.stTxCanMsg.u8CanData[3]=0xBB;
-  clCAN.stVar.stTxCanMsg.u8CanData[4]=0xCC;
-  clCAN.stVar.stTxCanMsg.u8CanData[5]=0xDD;
-  clCAN.stVar.stTxCanMsg.u8CanData[6]=0xEE;
-  clCAN.stVar.stTxCanMsg.u8CanData[7]=0xFF;
+  clCAN.stVar.stCanTxMsg.u32CanId=0x123;
+  clCAN.stVar.stCanTxMsg.u32CanDlc=0x8;
+  clCAN.stVar.stCanTxMsg.u8CanData[0]=0x88;
+  clCAN.stVar.stCanTxMsg.u8CanData[1]=0x99;
+  clCAN.stVar.stCanTxMsg.u8CanData[2]=0xAA;
+  clCAN.stVar.stCanTxMsg.u8CanData[3]=0xBB;
+  clCAN.stVar.stCanTxMsg.u8CanData[4]=0xCC;
+  clCAN.stVar.stCanTxMsg.u8CanData[5]=0xDD;
+  clCAN.stVar.stCanTxMsg.u8CanData[6]=0xEE;
+  clCAN.stVar.stCanTxMsg.u8CanData[7]=0xFF;
   /* Infinite loop */
   for(;;)
   {
-    clCAN.CAN_AddTxMessage(&clCAN.stVar.stTxCanMsg);
+    clCAN.CAN_AddTxMessage(&clCAN.stVar.stCanTxMsg);
     osDelay(500);
   }
   /* USER CODE END 5 */

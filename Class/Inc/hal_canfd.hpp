@@ -64,8 +64,8 @@ class CAN_CLASS
 
 		struct
 		{
-			CanMsg_st_t stTxCanMsg;
-			CanMsg_st_t stRxCanMsg;
+			CanMsg_st_t stCanTxMsg;
+			CanMsg_st_t stCanRxMsg;
 		}stVar;
 
 		// Methods Declaration
