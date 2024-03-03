@@ -39,7 +39,12 @@
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 CAN_CLASS::CAN_CLASS() {
-	// TODO Auto-generated constructor stub
+    // Initialize class members by Constructor
+    this->stStatus.enCanFilterConfig = HAL_ApiState::HAL_FAIL;
+    this->stStatus.enCanStart = HAL_ApiState::HAL_FAIL;
+    this->stStatus.enCanActivateTxNotification = HAL_ApiState::HAL_FAIL;
+    this->stStatus.enCanActivateRxNotification = HAL_ApiState::HAL_FAIL;
+    this->stStatus.enCanAddTxMessage = HAL_ApiState::HAL_FAIL;
 }
 
 CAN_CLASS::~CAN_CLASS() {

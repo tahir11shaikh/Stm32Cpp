@@ -39,6 +39,7 @@
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 GPIO_CLASS::GPIO_CLASS() {
+    // Initialize class members by Constructor
     // Initialize all PinConfig in stDIn with HAL_PIN_LOW
     for (int i = 0; i < GPI_PIN_MaxCnt; i++) {
         this->stStatus.stDIn.enPinState[i] = HAL_PIN_LOW;

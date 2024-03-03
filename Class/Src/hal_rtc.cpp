@@ -39,7 +39,11 @@
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 RTC_CLASS::RTC_CLASS() {
-	// TODO Auto-generated constructor stub
+    // Initialize class members by Constructor
+    this->stStatus.enSetTime = HAL_ApiState::HAL_FAIL;
+    this->stStatus.enGetTime = HAL_ApiState::HAL_FAIL;
+    this->stStatus.enSetDate = HAL_ApiState::HAL_FAIL;
+    this->stStatus.enGetDate = HAL_ApiState::HAL_FAIL;
 }
 
 RTC_CLASS::~RTC_CLASS() {

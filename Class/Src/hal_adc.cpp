@@ -39,10 +39,15 @@
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 ADC_CLASS::ADC_CLASS() {
-    // Initialize all PinConfig in stDIn with HAL_PIN_LOW
-    for (int i = 0; i < ADC_PIN_MaxCnt; i++) {
-        this->stStatus.stAin.enPinState[i] = HAL_PIN_LOW;
+    // Initialize class members by Constructor
+    for (int i = 0; i < ADC_PIN_MaxCnt; ++i) {
+         this->stStatus.stAin.enPinState[i] = HAL_PinState::HAL_PIN_LOW;
+         this->stVar.u32ChannelValue[i] = 0;
+         this->stDMA.stADC.u32ChannelValue[i] = 0;
     }
+    this->stDMA.stADC.u8ChannelCnt = 0;
+    this->stDMA.stADC.enAdcDmaStatus = HAL_FunState::HAL_DISABLE;
+
 }
 
 ADC_CLASS::~ADC_CLASS() {
