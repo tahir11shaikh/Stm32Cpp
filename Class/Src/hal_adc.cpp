@@ -125,16 +125,21 @@ uint32_t ADC_CLASS::ADC_ReadSingleChannelPoll(ADC_PinTypeDef enPinTypeDef)
             break;
     }
 
-    /* Configure Regular Channel */
-    sConfig.SingleDiff = ADC_SINGLE_ENDED;
-    sConfig.OffsetNumber = ADC_OFFSET_NONE;
-    sConfig.Offset = 0;
-    if (HAL_ADC_ConfigChannel(this->hadc, &sConfig) == HAL_OK)
+    if (enPinTypeDef < ADC_PIN_MaxCnt)
     {
-        HAL_ADC_Start(this->hadc); // Start ADC
-        HAL_ADC_PollForConversion(this->hadc, 100); // Poll For Conversation
-        this->stVar.u32ChannelValue[enPinTypeDef] = HAL_ADC_GetValue(this->hadc); // Get ADC Value
-        HAL_ADC_Stop(this->hadc); // Stop ADC
+        /* Configure Regular Channel */
+        sConfig.SingleDiff = ADC_SINGLE_ENDED;
+        sConfig.OffsetNumber = ADC_OFFSET_NONE;
+        sConfig.Offset = 0;
+        if (HAL_ADC_ConfigChannel(this->hadc, &sConfig) == HAL_OK)
+        {
+            HAL_ADC_Start(this->hadc); // Start ADC
+            HAL_ADC_PollForConversion(this->hadc, 100); // Poll For Conversation
+            this->stVar.u32ChannelValue[enPinTypeDef] = HAL_ADC_GetValue(this->hadc); // Get ADC Value
+            HAL_ADC_Stop(this->hadc); // Stop ADC
+        }
+        return this->stVar.u32ChannelValue[enPinTypeDef];
+    } else {
+        return 0;
     }
-    return this->stVar.u32ChannelValue[enPinTypeDef];
 }

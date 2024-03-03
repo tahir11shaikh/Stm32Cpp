@@ -22,7 +22,13 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "hal_swv.hpp"
+#include "hal_adc.hpp"
+#include "hal_pwm.hpp"
+#include "hal_rtc.hpp"
+#include "hal_gpio.hpp"
+#include "hal_flash.hpp"
+#include "hal_canfd.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,7 +63,14 @@ osTimerId myTimer01Handle;
 osMutexId myMutex01Handle;
 osSemaphoreId myBinarySem01Handle;
 /* USER CODE BEGIN PV */
+SWV_CLASS clSWV;
+GPIO_CLASS clGPIO;
+FLASH_CLASS clFLASH;
 
+RTC_CLASS clRTC(&hrtc);
+ADC_CLASS clADC(&hadc1);
+PWM_CLASS clPWM(&htim1);
+CAN_CLASS clCAN(&hfdcan1);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -78,7 +91,40 @@ void Callback01(void const * argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/* CAN Interrupt Callback */
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
+{
+  CanMsg_st_t stCanRxMsg;
 
+  if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
+  {
+    HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &stCanRxMsg.RxHeader, stCanRxMsg.u8CanData);
+    if (stCanRxMsg.RxHeader.IdType == FDCAN_STANDARD_ID)
+    {
+      stCanRxMsg.u32CanId = stCanRxMsg.RxHeader.Identifier;
+      stCanRxMsg.u32CanDlc = (stCanRxMsg.RxHeader.DataLength == FDCAN_DLC_BYTES_8) ? 8u : stCanRxMsg.RxHeader.DataLength;
+
+      for (uint8_t idx=0; idx<8u; ++idx)
+      {
+        stCanRxMsg.u8CanData[idx] = stCanRxMsg.u8CanData[idx];
+      }
+
+      // Increment the receive count
+      stCanRxMsg.u64RxSentCounter++;
+
+      // Send message to the queue (non-blocking call in ISR)
+      osMessagePut(myQueue01Handle, (uint32_t)&stCanRxMsg, 0);
+
+      // Re-Enable RX Interrupt
+      HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+    }
+  }
+}
+
+void HAL_FDCAN_TxFifoEmptyCallback(FDCAN_HandleTypeDef *hfdcan)
+{
+  ++clCAN.stVar.stCanTxMsg.u64TxSentCounter;
+}
 /* USER CODE END 0 */
 
 /**
@@ -115,7 +161,17 @@ int main(void)
   MX_RTC_Init();
   MX_FDCAN1_Init();
   /* USER CODE BEGIN 2 */
+  /* Start CAN Interface */
+  clCAN.CAN_Start();
 
+  /* Start CAN Filter Configuration */
+  clCAN.CAN_FilterConfig();
+
+  /* Start CAN Tx Interrupt Callback */
+  clCAN.CAN_ActivateTxNotification();
+
+  /* Start CAN Rx Interrupt Callback */
+  clCAN.CAN_ActivateRxNotification();
   /* USER CODE END 2 */
 
   /* Create the mutex(es) */
@@ -147,7 +203,7 @@ int main(void)
 
   /* Create the queue(s) */
   /* definition and creation of myQueue01 */
-  osMessageQDef(myQueue01, 16, uint16_t);
+  osMessageQDef(myQueue01, 16, CanMsg_st_t);
   myQueue01Handle = osMessageCreate(osMessageQ(myQueue01), NULL);
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -560,10 +616,20 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
+  /* Example: Start ADC */
+  //clADC.ADC_StartDMA();
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(500);
+    /* Example: Read ADC Channel By DMA*/
+    //int ch1value = clADC.ADC_ReadSingleChannelDMA(ADC_Sensor_1);
+
+    /* Example: Read ADC Channel By Poll*/
+    int ch1value = clADC.ADC_ReadSingleChannelPoll(ADC_Sensor_1);
+
+    clSWV.SWV_Print("ADC Ch 1:%d\n",ch1value);
+	osDelay(500);
   }
   /* USER CODE END 5 */
 }
@@ -581,6 +647,12 @@ void StartTask02(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+    osEvent event = osMessageGet(myQueue01Handle, osWaitForever);
+    if (event.status == osEventMessage) {
+      CanMsg_st_t* stCanRxMsg = (CanMsg_st_t*)event.value.p;
+      // Process the received message
+      clCAN.stVar.stCanRxMsg = *stCanRxMsg;
+    }
     osDelay(100);
   }
   /* USER CODE END StartTask02 */
