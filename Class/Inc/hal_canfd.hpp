@@ -33,45 +33,47 @@ extern "C" {
 /* USER CODE BEGIN ET */
 typedef struct CanMsg_st
 {
-  uint32_t u32CanId;
-  uint32_t u32CanDlc;
-  uint8_t  u8CanData[8];
-  uint64_t u64TxSentCounter;
-  uint64_t u64RxSentCounter;
-  FDCAN_TxHeaderTypeDef TxHeader;
-  FDCAN_RxHeaderTypeDef RxHeader;
+    uint32_t u32CanId;
+    uint32_t u32CanDlc;
+    uint8_t  u8CanData[8];
+    uint64_t u64TxSentCounter;
+    uint64_t u64RxSentCounter;
+    FDCAN_TxHeaderTypeDef TxHeader;
+    FDCAN_RxHeaderTypeDef RxHeader;
 } CanMsg_st_t;
 
 typedef class CAN_CLASS
 {
-	public:
-		// Internal Declaration
-		CAN_CLASS();
-		virtual ~CAN_CLASS();
+    public:
+        // Internal Declaration
+        explicit CAN_CLASS(FDCAN_HandleTypeDef *hfdcan);
+        virtual ~CAN_CLASS();
 
-		// Variable Declaration
-		struct
-		{
-			HAL_ApiState enCanFilterConfig;
-			HAL_ApiState enCanStart;
-			HAL_ApiState enCanActivateTxNotification;
-			HAL_ApiState enCanActivateRxNotification;
-			HAL_ApiState enCanAddTxMessage;
-		} stStatus;
+        // Variable Declaration
+        struct
+        {
+            HAL_ApiState enCanFilterConfig;
+            HAL_ApiState enCanStart;
+            HAL_ApiState enCanActivateTxNotification;
+            HAL_ApiState enCanActivateRxNotification;
+            HAL_ApiState enCanAddTxMessage;
+        } stStatus;
 
-		struct
-		{
-			CanMsg_st_t stCanTxMsg;
-			CanMsg_st_t stCanRxMsg;
-		}stVar;
+        struct
+        {
+            CanMsg_st_t stCanTxMsg;
+            CanMsg_st_t stCanRxMsg;
+        }stVar;
 
-		// Methods Declaration
-		HAL_ApiState CAN_FilterConfig(void);
-		HAL_ApiState CAN_Start(void);
-		HAL_ApiState CAN_ActivateTxNotification(void);
-		HAL_ApiState CAN_ActivateRxNotification(void);
-		HAL_ApiState CAN_AddTxMessage(CanMsg_st_t *stCanTxMsg);
-}CAN_CLASS;
+        // Methods Declaration
+        HAL_ApiState CAN_FilterConfig(void);
+        HAL_ApiState CAN_Start(void);
+        HAL_ApiState CAN_ActivateTxNotification(void);
+        HAL_ApiState CAN_ActivateRxNotification(void);
+        HAL_ApiState CAN_AddTxMessage(CanMsg_st_t *stCanTxMsg);
+    private:
+        FDCAN_HandleTypeDef *hfdcan;
+} CAN_CLASS;
 /* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/

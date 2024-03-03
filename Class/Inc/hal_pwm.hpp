@@ -35,35 +35,37 @@ extern "C" {
 /* USER CODE BEGIN ET */
 typedef enum
 {
-	PWM_PIN_1,
+    PWM_PIN_1,
 
-	PWM_PIN_MaxCnt,
+    PWM_PIN_MaxCnt,
 } PWM_PinTypeDef;
 
 typedef class PWM_CLASS
 {
-	public:
-		// Internal Declaration
-		PWM_CLASS();
-		virtual ~PWM_CLASS();
+    public:
+        // Internal Declaration
+        explicit PWM_CLASS(TIM_HandleTypeDef *htim);
+        virtual ~PWM_CLASS();
 
-		// Variable Declaration
-		struct
-		{
-			uint32_t u32PwmPinDutyCycle[PWM_PIN_MaxCnt];
-		} stVar;
+        // Variable Declaration
+        struct
+        {
+            uint32_t u32PwmPinDutyCycle[PWM_PIN_MaxCnt];
+        } stVar;
 
-		struct
-		{
-			HAL_ApiState enPwmPinStart[PWM_PIN_MaxCnt];
-			HAL_ApiState enPwmPinStop[PWM_PIN_MaxCnt];
-		} stStatus;
+        struct
+        {
+            HAL_ApiState enPwmPinStart[PWM_PIN_MaxCnt];
+            HAL_ApiState enPwmPinStop[PWM_PIN_MaxCnt];
+        } stStatus;
 
-		// Methods Declaration
-		HAL_ApiState PWM_Start(PWM_PinTypeDef enPinTypeDef);
-		HAL_ApiState PWM_Stop(PWM_PinTypeDef enPinTypeDef);
-		HAL_ApiState PWM_SetDutyCycle(PWM_PinTypeDef enPinTypeDef, uint8_t ucDutyCycle);
-}PWM_CLASS;
+        // Methods Declaration
+        HAL_ApiState PWM_Start(PWM_PinTypeDef enPinTypeDef);
+        HAL_ApiState PWM_Stop(PWM_PinTypeDef enPinTypeDef);
+        HAL_ApiState PWM_SetDutyCycle(PWM_PinTypeDef enPinTypeDef, uint8_t ucDutyCycle);
+    private:
+        TIM_HandleTypeDef *htim;
+} PWM_CLASS;
 /* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/

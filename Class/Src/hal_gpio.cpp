@@ -54,7 +54,7 @@ GPIO_CLASS::GPIO_CLASS()
 
 GPIO_CLASS::~GPIO_CLASS()
 {
-	// TODO Auto-generated destructor stub
+    // TODO Auto-generated destructor stub
 }
 /* USER CODE END 0 */
 

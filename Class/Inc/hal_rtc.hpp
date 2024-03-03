@@ -33,31 +33,33 @@ extern "C" {
 /* USER CODE BEGIN ET */
 typedef class RTC_CLASS
 {
-	public:
-		// Internal Declaration
-		RTC_CLASS();
-		virtual ~RTC_CLASS();
+    public:
+        // Internal Declaration
+        explicit RTC_CLASS(RTC_HandleTypeDef *hrtc);
+        virtual ~RTC_CLASS();
 
-		// Variable Declaration
-		struct
-		{
-			RTC_TimeTypeDef stSetTime;
-			RTC_TimeTypeDef stGetTime;
-			RTC_DateTypeDef stSetDate;
-			RTC_DateTypeDef stGetDate;
-		} stVar;
+        // Variable Declaration
+        struct
+        {
+            RTC_TimeTypeDef stSetTime;
+            RTC_TimeTypeDef stGetTime;
+            RTC_DateTypeDef stSetDate;
+            RTC_DateTypeDef stGetDate;
+        } stVar;
 
-		struct
-		{
-			HAL_ApiState enSetTime;
-			HAL_ApiState enGetTime;
-			HAL_ApiState enSetDate;
-			HAL_ApiState enGetDate;
-		} stStatus;
+        struct
+        {
+            HAL_ApiState enSetTime;
+            HAL_ApiState enGetTime;
+            HAL_ApiState enSetDate;
+            HAL_ApiState enGetDate;
+        } stStatus;
 
-		// Methods Declaration
-		HAL_ApiState RTC_vSetTimeDate();
-		HAL_ApiState RTC_vGetTimeDate();
+        // Methods Declaration
+        HAL_ApiState RTC_vSetTimeDate();
+        HAL_ApiState RTC_vGetTimeDate();
+    private:
+        RTC_HandleTypeDef *hrtc;
 }RTC_CLASS;
 /* USER CODE END ET */
 

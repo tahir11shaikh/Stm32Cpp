@@ -37,30 +37,30 @@ extern "C" {
 /* USER CODE BEGIN ET */
 typedef class FLASH_CLASS
 {
-	public:
-		// Internal Declaration
-		FLASH_CLASS();
-		virtual ~FLASH_CLASS();
+    public:
+        // Internal Declaration
+        explicit FLASH_CLASS();
+        virtual ~FLASH_CLASS();
 
-		// Methods Declaration
-		HAL_ApiState FLASH_MemEraseByPage(const uint32_t u32MemAdd);
-		HAL_ApiState FLASH_MemWriteData(const uint32_t u32MemAdd, uint8_t *pData, uint16_t u16DataLen);
-		HAL_ApiState FLASH_MemReadData(const uint32_t u32MemAdd, uint8_t *pData, uint16_t u16DataLen);
+        // Methods Declaration
+        HAL_ApiState FLASH_MemEraseByPage(const uint32_t u32MemAdd);
+        HAL_ApiState FLASH_MemWriteData(const uint32_t u32MemAdd, uint8_t *pData, uint16_t u16DataLen);
+        HAL_ApiState FLASH_MemReadData(const uint32_t u32MemAdd, uint8_t *pData, uint16_t u16DataLen);
 
-	private:
-		struct Status
-		{
-			HAL_ApiState enMemErase;
-			struct MemRead
-			{
-				HAL_ApiState enMemRead;
-			} stMemRead;
-			struct MemWrite
-			{
-				HAL_ApiState enMemWrite;
-			} stMemWrite;
-		} stStatus;
-}FLASH_CLASS;
+    private:
+        struct Status
+        {
+            HAL_ApiState enMemErase;
+            struct MemRead
+            {
+                HAL_ApiState enMemRead;
+            } stMemRead;
+            struct MemWrite
+            {
+                HAL_ApiState enMemWrite;
+            } stMemWrite;
+        } stStatus;
+} FLASH_CLASS;
 /* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/

@@ -39,7 +39,8 @@
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 // Instance Declaration
-PWM_CLASS::PWM_CLASS()
+PWM_CLASS::PWM_CLASS(TIM_HandleTypeDef *htim)
+    :htim(htim)
 {
     // Initialize class members by Constructor
     for (int i = 0; i < PWM_PIN_MaxCnt; ++i) {
@@ -51,13 +52,12 @@ PWM_CLASS::PWM_CLASS()
 
 PWM_CLASS::~PWM_CLASS()
 {
-	// TODO Auto-generated destructor stub
+    // TODO Auto-generated destructor stub
 }
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
 /* USER CODE BEGIN EV */
-extern TIM_HandleTypeDef htim1;
 /* USER CODE END EV */
 
 /* functions --------------------------------------------------------*/
@@ -69,25 +69,25 @@ extern TIM_HandleTypeDef htim1;
   */
 HAL_ApiState PWM_CLASS::PWM_Start(PWM_PinTypeDef enPinTypeDef)
 {
-	HAL_StatusTypeDef enStatus = HAL_ERROR;
+    HAL_StatusTypeDef enStatus = HAL_ERROR;
 
-	switch(enPinTypeDef)
-	{
-		case PWM_PIN_1:
-			enStatus = HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-			break;
-		default:
-		case PWM_PIN_MaxCnt:
-			break;
-	}
-	if (enStatus != HAL_OK)
-	{
-		stStatus.enPwmPinStart[enPinTypeDef] = HAL_FAIL;
-	} else {
-		stStatus.enPwmPinStart[enPinTypeDef] = HAL_SUCCESS;
-	}
+    switch(enPinTypeDef)
+    {
+        case PWM_PIN_1:
+            enStatus = HAL_TIM_PWM_Start(this->htim, TIM_CHANNEL_1);
+            break;
+        default:
+        case PWM_PIN_MaxCnt:
+            break;
+    }
+    if (enStatus != HAL_OK)
+    {
+        this->stStatus.enPwmPinStart[enPinTypeDef] = HAL_FAIL;
+    } else {
+        this->stStatus.enPwmPinStart[enPinTypeDef] = HAL_SUCCESS;
+    }
 
-	return stStatus.enPwmPinStart[enPinTypeDef];
+    return this->stStatus.enPwmPinStart[enPinTypeDef];
 }
 
 /**
@@ -97,25 +97,25 @@ HAL_ApiState PWM_CLASS::PWM_Start(PWM_PinTypeDef enPinTypeDef)
   */
 HAL_ApiState PWM_CLASS::PWM_Stop(PWM_PinTypeDef enPinTypeDef)
 {
-	HAL_StatusTypeDef enStatus = HAL_ERROR;
+    HAL_StatusTypeDef enStatus = HAL_ERROR;
 
-	switch(enPinTypeDef)
-	{
-		case PWM_PIN_1:
-			enStatus = HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-			break;
-		default:
-		case PWM_PIN_MaxCnt:
-			break;
-	}
-	if (enStatus != HAL_OK)
-	{
-		stStatus.enPwmPinStop[enPinTypeDef] = HAL_FAIL;
-	} else {
-		stStatus.enPwmPinStop[enPinTypeDef] = HAL_SUCCESS;
-	}
+    switch(enPinTypeDef)
+    {
+        case PWM_PIN_1:
+            enStatus = HAL_TIM_PWM_Stop(this->htim, TIM_CHANNEL_1);
+            break;
+        default:
+        case PWM_PIN_MaxCnt:
+            break;
+    }
+    if (enStatus != HAL_OK)
+    {
+        this->stStatus.enPwmPinStop[enPinTypeDef] = HAL_FAIL;
+    } else {
+        this->stStatus.enPwmPinStop[enPinTypeDef] = HAL_SUCCESS;
+    }
 
-	return stStatus.enPwmPinStop[enPinTypeDef];
+    return this->stStatus.enPwmPinStop[enPinTypeDef];
 }
 
 /**
@@ -126,18 +126,18 @@ HAL_ApiState PWM_CLASS::PWM_Stop(PWM_PinTypeDef enPinTypeDef)
   */
 HAL_ApiState PWM_CLASS::PWM_SetDutyCycle(PWM_PinTypeDef enPinTypeDef, uint8_t u8DutyCycle)
 {
-	uint8_t _u8DutyCycle;
-	_u8DutyCycle = (uint8_t)(u8DutyCycle < MIN_DUTY_CYCLE) ? MIN_DUTY_CYCLE : ((u8DutyCycle > MAX_DUTY_CYCLE) ? MAX_DUTY_CYCLE : u8DutyCycle);
+    uint8_t _u8DutyCycle;
+    _u8DutyCycle = (uint8_t)(u8DutyCycle < MIN_DUTY_CYCLE) ? MIN_DUTY_CYCLE : ((u8DutyCycle > MAX_DUTY_CYCLE) ? MAX_DUTY_CYCLE : u8DutyCycle);
 
-	switch(enPinTypeDef)
-	{
-		case PWM_PIN_1:
-		  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, _u8DutyCycle);
-		  break;
-		default:
-		case PWM_PIN_MaxCnt:
-			break;
-	}
+    switch(enPinTypeDef)
+    {
+        case PWM_PIN_1:
+            __HAL_TIM_SET_COMPARE(this->htim, TIM_CHANNEL_1, _u8DutyCycle);
+            break;
+        default:
+        case PWM_PIN_MaxCnt:
+            break;
+    }
 
-	return HAL_SUCCESS;
+    return HAL_SUCCESS;
 }
