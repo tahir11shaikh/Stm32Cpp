@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,9 +52,12 @@ TIM_HandleTypeDef htim1;
 
 osThreadId defaultTaskHandle;
 osThreadId myTask02Handle;
+osMessageQId myQueue01Handle;
+osTimerId myTimer01Handle;
 osMutexId myMutex01Handle;
-osMutexId myMutex02Handle;
+osSemaphoreId myBinarySem01Handle;
 /* USER CODE BEGIN PV */
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -66,13 +70,15 @@ static void MX_RTC_Init(void);
 static void MX_FDCAN1_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
+void Callback01(void const * argument);
 
 /* USER CODE BEGIN PFP */
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-/* CAN Interrupt Callback */
+
 /* USER CODE END 0 */
 
 /**
@@ -109,6 +115,7 @@ int main(void)
   MX_RTC_Init();
   MX_FDCAN1_Init();
   /* USER CODE BEGIN 2 */
+
   /* USER CODE END 2 */
 
   /* Create the mutex(es) */
@@ -116,21 +123,32 @@ int main(void)
   osMutexDef(myMutex01);
   myMutex01Handle = osMutexCreate(osMutex(myMutex01));
 
-  /* definition and creation of myMutex02 */
-  osMutexDef(myMutex02);
-  myMutex02Handle = osMutexCreate(osMutex(myMutex02));
-
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
+
+  /* Create the semaphores(s) */
+  /* definition and creation of myBinarySem01 */
+  osSemaphoreDef(myBinarySem01);
+  myBinarySem01Handle = osSemaphoreCreate(osSemaphore(myBinarySem01), 1);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
 
+  /* Create the timer(s) */
+  /* definition and creation of myTimer01 */
+  osTimerDef(myTimer01, Callback01);
+  myTimer01Handle = osTimerCreate(osTimer(myTimer01), osTimerPeriodic, NULL);
+
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
+
+  /* Create the queue(s) */
+  /* definition and creation of myQueue01 */
+  osMessageQDef(myQueue01, 16, uint16_t);
+  myQueue01Handle = osMessageCreate(osMessageQ(myQueue01), NULL);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -566,6 +584,14 @@ void StartTask02(void const * argument)
     osDelay(100);
   }
   /* USER CODE END StartTask02 */
+}
+
+/* Callback01 function */
+void Callback01(void const * argument)
+{
+  /* USER CODE BEGIN Callback01 */
+
+  /* USER CODE END Callback01 */
 }
 
 /**

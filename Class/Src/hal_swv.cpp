@@ -58,7 +58,7 @@ SWV_CLASS::~SWV_CLASS()
 /* functions --------------------------------------------------------*/
 
 /**
-  * @brief  This function is used to set PIN level high/low.
+  * @brief  This function is used to print on SWV console
   * @param  const char *format, ...
   * @retval uint32_t
   */
