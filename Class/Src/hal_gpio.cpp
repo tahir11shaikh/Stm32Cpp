@@ -44,12 +44,12 @@ GPIO_CLASS clGPIO;
 GPIO_CLASS::GPIO_CLASS() {
     // Initialize all PinConfig in stDIn with HAL_PIN_LOW
     for (int i = 0; i < GPI_PIN_MaxCnt; i++) {
-        stIO.stDIn.enPinState[i] = HAL_PIN_LOW;
+        this->stStatus.stDIn.enPinState[i] = HAL_PIN_LOW;
     }
 
     // Initialize all PinConfig in stDout with HAL_PIN_LOW
     for (int i = 0; i < GPO_PIN_MaxCnt; i++) {
-        stIO.stDout.enPinState[i] = HAL_PIN_LOW;
+        this->stStatus.stDout.enPinState[i] = HAL_PIN_LOW;
     }
 }
 
@@ -80,7 +80,7 @@ HAL_PinState GPIO_CLASS::GPO_PinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinSta
         case GPO_PIN_MaxCnt:
             break;
     }
-    return stIO.stDout.enPinState[enPinTypeDef] = enPinState;
+    return this->stStatus.stDout.enPinState[enPinTypeDef] = enPinState;
 }
 
 /**
@@ -99,7 +99,7 @@ HAL_PinState GPIO_CLASS::GPO_PinToggle(GPO_PinTypeDef enPinTypeDef)
         case GPO_PIN_MaxCnt:
             break;
     }
-    return stIO.stDout.enPinState[enPinTypeDef] = (stIO.stDout.enPinState[enPinTypeDef] == HAL_PIN_LOW) ? HAL_PIN_HIGH : HAL_PIN_LOW;
+    return this->stStatus.stDout.enPinState[enPinTypeDef] = (this->stStatus.stDout.enPinState[enPinTypeDef] == HAL_PIN_LOW) ? HAL_PIN_HIGH : HAL_PIN_LOW;
 }
 
 /**
@@ -119,6 +119,6 @@ HAL_PinState GPIO_CLASS::GPI_PinGetLevel(GPI_PinTypeDef enPinTypeDef)
         case GPI_PIN_MaxCnt:
             break;
     }
-    return stIO.stDIn.enPinState[enPinTypeDef] = enPinState;
+    return this->stStatus.stDIn.enPinState[enPinTypeDef] = enPinState;
 }
 

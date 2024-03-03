@@ -58,7 +58,7 @@ class FLASH_CLASS
 			{
 				HAL_ApiState enMemWrite;
 			}stMemWrite;
-		} stState;
+		} stStatus;
 
 		// Methods Declaration
 		HAL_ApiState FLASH_MemEraseByPage(const uint32_t u32MemAdd);

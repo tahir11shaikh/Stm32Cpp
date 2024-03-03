@@ -17,7 +17,6 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-
 #include "main.h"
 #include "cmsis_os.h"
 
@@ -28,6 +27,7 @@
 #include <hal_pwm.hpp>
 #include <hal_rtc.hpp>
 #include <hal_flash.hpp>
+#include <hal_canfd.hpp>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,6 +49,8 @@
 ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 
+FDCAN_HandleTypeDef hfdcan1;
+
 RTC_HandleTypeDef hrtc;
 
 TIM_HandleTypeDef htim1;
@@ -63,6 +65,7 @@ extern ADC_CLASS clADC;
 extern PWM_CLASS clPWM;
 extern RTC_CLASS clRTC;
 extern FLASH_CLASS clFLASH;
+extern CAN_CLASS clCAN;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -72,6 +75,7 @@ static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_RTC_Init(void);
+static void MX_FDCAN1_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
 
@@ -98,7 +102,36 @@ int SWV_Print(const char *format, ...)
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/* CAN Interrupt Callback */
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
+{
+  uint8_t RxData[8];
 
+  if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
+  {
+    HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &clCAN.stVar.stRxCanMsg.RxHeader, RxData);
+    if (clCAN.stVar.stRxCanMsg.RxHeader.IdType == FDCAN_STANDARD_ID)
+    {
+      clCAN.stVar.stRxCanMsg.u32CanId = clCAN.stVar.stRxCanMsg.RxHeader.Identifier;
+      clCAN.stVar.stRxCanMsg.u32CanDlc = (clCAN.stVar.stRxCanMsg.RxHeader.DataLength == FDCAN_DLC_BYTES_8) ? 8u : clCAN.stVar.stRxCanMsg.RxHeader.DataLength;
+
+      for (uint8_t idx=0; idx<8u; ++idx)
+      {
+        clCAN.stVar.stRxCanMsg.u8CanData[idx] = RxData[idx];
+      }
+
+      // Increment the receive count
+      clCAN.stVar.stRxCanMsg.u64RxSentCounter++;
+
+      // Re-Enable RX Interrupt
+      HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+    }
+  }
+}
+void HAL_FDCAN_TxFifoEmptyCallback(FDCAN_HandleTypeDef *hfdcan)
+{
+  ++clCAN.stVar.stTxCanMsg.u64TxSentCounter;
+}
 /* USER CODE END 0 */
 
 /**
@@ -133,8 +166,12 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM1_Init();
   MX_RTC_Init();
+  MX_FDCAN1_Init();
   /* USER CODE BEGIN 2 */
-
+  clCAN.CAN_Start();
+  clCAN.CAN_FilterConfig();
+  clCAN.CAN_ActivateTxNotification();
+  clCAN.CAN_ActivateRxNotification();
   /* USER CODE END 2 */
 
   /* Create the mutex(es) */
@@ -308,6 +345,49 @@ static void MX_ADC1_Init(void)
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * @brief FDCAN1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_FDCAN1_Init(void)
+{
+
+  /* USER CODE BEGIN FDCAN1_Init 0 */
+
+  /* USER CODE END FDCAN1_Init 0 */
+
+  /* USER CODE BEGIN FDCAN1_Init 1 */
+
+  /* USER CODE END FDCAN1_Init 1 */
+  hfdcan1.Instance = FDCAN1;
+  hfdcan1.Init.ClockDivider = FDCAN_CLOCK_DIV1;
+  hfdcan1.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
+  hfdcan1.Init.Mode = FDCAN_MODE_NORMAL;
+  hfdcan1.Init.AutoRetransmission = ENABLE;
+  hfdcan1.Init.TransmitPause = DISABLE;
+  hfdcan1.Init.ProtocolException = DISABLE;
+  hfdcan1.Init.NominalPrescaler = 1;
+  hfdcan1.Init.NominalSyncJumpWidth = 4;
+  hfdcan1.Init.NominalTimeSeg1 = 110;
+  hfdcan1.Init.NominalTimeSeg2 = 37;
+  hfdcan1.Init.DataPrescaler = 4;
+  hfdcan1.Init.DataSyncJumpWidth = 16;
+  hfdcan1.Init.DataTimeSeg1 = 20;
+  hfdcan1.Init.DataTimeSeg2 = 16;
+  hfdcan1.Init.StdFiltersNbr = 1;
+  hfdcan1.Init.ExtFiltersNbr = 0;
+  hfdcan1.Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
+  if (HAL_FDCAN_Init(&hfdcan1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN FDCAN1_Init 2 */
+
+  /* USER CODE END FDCAN1_Init 2 */
 
 }
 
@@ -525,11 +605,21 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
-
+  clCAN.stVar.stTxCanMsg.u32CanId=0x123;
+  clCAN.stVar.stTxCanMsg.u32CanDlc=0x8;
+  clCAN.stVar.stTxCanMsg.u8CanData[0]=0x88;
+  clCAN.stVar.stTxCanMsg.u8CanData[1]=0x99;
+  clCAN.stVar.stTxCanMsg.u8CanData[2]=0xAA;
+  clCAN.stVar.stTxCanMsg.u8CanData[3]=0xBB;
+  clCAN.stVar.stTxCanMsg.u8CanData[4]=0xCC;
+  clCAN.stVar.stTxCanMsg.u8CanData[5]=0xDD;
+  clCAN.stVar.stTxCanMsg.u8CanData[6]=0xEE;
+  clCAN.stVar.stTxCanMsg.u8CanData[7]=0xFF;
   /* Infinite loop */
   for(;;)
   {
-	    osDelay(500);
+    clCAN.CAN_AddTxMessage(&clCAN.stVar.stTxCanMsg);
+    osDelay(500);
   }
   /* USER CODE END 5 */
 }

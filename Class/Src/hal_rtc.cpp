@@ -65,25 +65,25 @@ extern RTC_HandleTypeDef hrtc;
 HAL_ApiState RTC_CLASS::RTC_vSetTimeDate()
 {
 	// Set the RTC new Time
-	stSetTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-	stSetTime.StoreOperation = RTC_STOREOPERATION_RESET;
-	if (HAL_RTC_SetTime(&hrtc, &this->stSetTime, RTC_FORMAT_BCD) != HAL_OK)
+	this->stVar.stSetTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+	this->stVar.stSetTime.StoreOperation = RTC_STOREOPERATION_RESET;
+	if (HAL_RTC_SetTime(&hrtc, &this->stVar.stSetTime, RTC_FORMAT_BCD) != HAL_OK)
 	{
-		this->stState.enSetTime = HAL_FAIL;
+		this->stStatus.enSetTime = HAL_FAIL;
 	} else {
-		this->stState.enSetTime = HAL_SUCCESS;
+		this->stStatus.enSetTime = HAL_SUCCESS;
 	}
 
 	// Set the RTC new Time
-	stSetDate.WeekDay = RTC_WEEKDAY_MONDAY;
-	if (HAL_RTC_SetDate(&hrtc, &this->stSetDate, RTC_FORMAT_BCD) != HAL_OK)
+	this->stVar.stSetDate.WeekDay = RTC_WEEKDAY_MONDAY;
+	if (HAL_RTC_SetDate(&hrtc, &this->stVar.stSetDate, RTC_FORMAT_BCD) != HAL_OK)
 	{
-		this->stState.enSetDate = HAL_FAIL;
+		this->stStatus.enSetDate = HAL_FAIL;
 	} else {
-		this->stState.enSetDate = HAL_SUCCESS;
+		this->stStatus.enSetDate = HAL_SUCCESS;
 	}
 
-	if (this->stState.enSetTime != HAL_FAIL && this->stState.enSetDate != HAL_FAIL)
+	if (this->stStatus.enSetTime != HAL_FAIL && this->stStatus.enSetDate != HAL_FAIL)
 	{
 		return HAL_SUCCESS;
 	} else {
@@ -99,22 +99,22 @@ HAL_ApiState RTC_CLASS::RTC_vSetTimeDate()
 HAL_ApiState RTC_CLASS::RTC_vGetTimeDate()
 {
 	// Get the RTC current Time
-	if (HAL_RTC_GetTime(&hrtc, &this->stGetTime, RTC_FORMAT_BIN) != HAL_OK)
+	if (HAL_RTC_GetTime(&hrtc, &this->stVar.stGetTime, RTC_FORMAT_BIN) != HAL_OK)
 	{
-		this->stState.enGetTime = HAL_FAIL;
+		this->stStatus.enGetTime = HAL_FAIL;
 	} else {
-		this->stState.enGetTime = HAL_SUCCESS;
+		this->stStatus.enGetTime = HAL_SUCCESS;
 	}
 
 	// Get the RTC current Date
-	if (HAL_RTC_GetDate(&hrtc, &this->stGetDate, RTC_FORMAT_BIN) != HAL_OK)
+	if (HAL_RTC_GetDate(&hrtc, &this->stVar.stGetDate, RTC_FORMAT_BIN) != HAL_OK)
 	{
-		this->stState.enGetDate = HAL_FAIL;
+		this->stStatus.enGetDate = HAL_FAIL;
 	} else {
-		this->stState.enGetDate = HAL_SUCCESS;
+		this->stStatus.enGetDate = HAL_SUCCESS;
 	}
 
-	if (this->stState.enSetTime != HAL_FAIL && this->stState.enGetDate != HAL_FAIL)
+	if (this->stStatus.enSetTime != HAL_FAIL && this->stStatus.enGetDate != HAL_FAIL)
 	{
 		return HAL_SUCCESS;
 	} else {

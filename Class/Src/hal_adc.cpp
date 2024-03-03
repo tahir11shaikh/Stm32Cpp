@@ -44,7 +44,7 @@ ADC_CLASS clADC;
 ADC_CLASS::ADC_CLASS() {
     // Initialize all PinConfig in stDIn with HAL_PIN_LOW
     for (int i = 0; i < ADC_PIN_MaxCnt; i++) {
-        stIO.stAin.enPinState[i] = HAL_PIN_LOW;
+        this->stStatus.stAin.enPinState[i] = HAL_PIN_LOW;
     }
 }
 
@@ -70,19 +70,19 @@ HAL_FunState ADC_CLASS::ADC_StartDMA(void)
 	if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) == HAL_OK)
 	{
 		// Evaluate number of ADC channels
-		this->stDMA.stADC.u8ChannelCnt = sizeof(stDMA.stADC.u32ChannelValue)/sizeof(stDMA.stADC.u32ChannelValue[0]);
+		this->stDMA.stADC.u8ChannelCnt = sizeof(this->stDMA.stADC.u32ChannelValue)/sizeof(this->stDMA.stADC.u32ChannelValue[0]);
 
 		// Start ADC DMA
-		if (HAL_ADC_Start_DMA(&hadc1, (uint32_t*) stDMA.stADC.u32ChannelValue, stDMA.stADC.u8ChannelCnt)!= HAL_OK)
+		if (HAL_ADC_Start_DMA(&hadc1, (uint32_t*) this->stDMA.stADC.u32ChannelValue, this->stDMA.stADC.u8ChannelCnt)!= HAL_OK)
 		{
-			stDMA.stADC.enAdcDmaStatus = HAL_DISABLE;
+			this->stDMA.stADC.enAdcDmaStatus = HAL_DISABLE;
 		} else {
-			stDMA.stADC.enAdcDmaStatus = HAL_ENABLE;
+			this->stDMA.stADC.enAdcDmaStatus = HAL_ENABLE;
 		}
 	} else {
-		stDMA.stADC.enAdcDmaStatus = HAL_DISABLE;
+		this->stDMA.stADC.enAdcDmaStatus = HAL_DISABLE;
 	}
-	return stDMA.stADC.enAdcDmaStatus;
+	return this->stDMA.stADC.enAdcDmaStatus;
 }
 
 /**
@@ -95,7 +95,7 @@ uint32_t ADC_CLASS::ADC_ReadSingleChannelDMA(ADC_PinTypeDef enPinTypeDef)
 	uint32_t u32AdcValue = 0;
 	if (enPinTypeDef < ADC_PIN_MaxCnt)
 	{
-		return stDMA.stADC.u32ChannelValue[enPinTypeDef];
+		return this->stDMA.stADC.u32ChannelValue[enPinTypeDef];
 	}
 	return u32AdcValue;
 }
@@ -130,8 +130,8 @@ uint32_t ADC_CLASS::ADC_ReadSingleChannelPoll(ADC_PinTypeDef enPinTypeDef)
 	{
 		HAL_ADC_Start(&hadc1); // Start ADC
 		HAL_ADC_PollForConversion(&hadc1, 100); // Poll For Conversation
-		u32ChannelValue[enPinTypeDef] = HAL_ADC_GetValue(&hadc1); // Get ADC Value
+		this->stVar.u32ChannelValue[enPinTypeDef] = HAL_ADC_GetValue(&hadc1); // Get ADC Value
 		HAL_ADC_Stop(&hadc1); // Stop ADC
 	}
-	return u32ChannelValue[enPinTypeDef];
+	return this->stVar.u32ChannelValue[enPinTypeDef];
 }

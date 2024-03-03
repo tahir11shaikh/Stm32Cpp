@@ -67,7 +67,7 @@ class GPIO_CLASS
 			{
 		    	HAL_PinState enPinState[GPO_PIN_MaxCnt];
 			} stDout;
-		} stIO;
+		} stStatus;
 
 		// Methods Declaration
 		HAL_PinState GPO_PinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinState enPinState);

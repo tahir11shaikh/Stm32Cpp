@@ -53,6 +53,11 @@ class PWM_CLASS
 		// Variable Declaration
 		struct
 		{
+			uint32_t u32PwmPinDutyCycle[PWM_PIN_MaxCnt];
+		} stVar;
+
+		struct
+		{
 			HAL_ApiState enPwmPinStart[PWM_PIN_MaxCnt];
 			HAL_ApiState enPwmPinStop[PWM_PIN_MaxCnt];
 		} stStatus;

@@ -55,9 +55,12 @@ class ADC_CLASS
 			{
 				HAL_PinState enPinState[ADC_PIN_MaxCnt];
 			} stAin;
-		} stIO;
+		} stStatus;
 
-		uint32_t u32ChannelValue[ADC_PIN_MaxCnt];
+		struct
+		{
+			uint32_t u32ChannelValue[ADC_PIN_MaxCnt];
+		} stVar;
 
 		struct
 		{
