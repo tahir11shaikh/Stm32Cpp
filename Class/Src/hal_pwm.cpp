@@ -39,7 +39,8 @@
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 // Instance Declaration
-PWM_CLASS::PWM_CLASS() {
+PWM_CLASS::PWM_CLASS()
+{
     // Initialize class members by Constructor
     for (int i = 0; i < PWM_PIN_MaxCnt; ++i) {
         this->stVar.u32PwmPinDutyCycle[i] = 0;
@@ -48,7 +49,8 @@ PWM_CLASS::PWM_CLASS() {
     }
 }
 
-PWM_CLASS::~PWM_CLASS() {
+PWM_CLASS::~PWM_CLASS()
+{
 	// TODO Auto-generated destructor stub
 }
 /* USER CODE END 0 */

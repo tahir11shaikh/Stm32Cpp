@@ -38,7 +38,8 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-ADC_CLASS::ADC_CLASS() {
+ADC_CLASS::ADC_CLASS()
+{
     // Initialize class members by Constructor
     for (int i = 0; i < ADC_PIN_MaxCnt; ++i) {
          this->stStatus.stAin.enPinState[i] = HAL_PinState::HAL_PIN_LOW;
@@ -50,7 +51,8 @@ ADC_CLASS::ADC_CLASS() {
 
 }
 
-ADC_CLASS::~ADC_CLASS() {
+ADC_CLASS::~ADC_CLASS()
+{
 	// TODO Auto-generated destructor stub
 }
 /* USER CODE END 0 */

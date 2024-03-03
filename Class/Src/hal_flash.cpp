@@ -38,11 +38,13 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-FLASH_CLASS::FLASH_CLASS() {
+FLASH_CLASS::FLASH_CLASS()
+{
 	// TODO Auto-generated constructor stub
 }
 
-FLASH_CLASS::~FLASH_CLASS() {
+FLASH_CLASS::~FLASH_CLASS()
+{
 	// TODO Auto-generated destructor stub
 }
 /* USER CODE END 0 */

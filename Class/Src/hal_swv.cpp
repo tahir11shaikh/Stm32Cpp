@@ -40,11 +40,13 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-SWV_CLASS::SWV_CLASS() {
+SWV_CLASS::SWV_CLASS()
+{
 	// TODO Auto-generated constructor stub
 }
 
-SWV_CLASS::~SWV_CLASS() {
+SWV_CLASS::~SWV_CLASS()
+{
 	// TODO Auto-generated destructor stub
 }
 /* USER CODE END 0 */
