@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <hal_swv.hpp>
 #include <hal_gpio.hpp>
 #include <hal_adc.hpp>
 #include <hal_pwm.hpp>
@@ -60,6 +61,7 @@ osThreadId myTask02Handle;
 osMutexId myMutex01Handle;
 osMutexId myMutex02Handle;
 /* USER CODE BEGIN PV */
+extern SWV_CLASS clSWV;
 extern GPIO_CLASS clGPIO;
 extern ADC_CLASS clADC;
 extern PWM_CLASS clPWM;
@@ -80,58 +82,11 @@ void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
 
 /* USER CODE BEGIN PFP */
-int SWV_Print(const char *format, ...)
-{
-    char buffer[64];
-    va_list args;
-    va_start(args, format);
-
-    // vsnprintf returns the number of characters that would have been written
-    int ret = vsnprintf(buffer, sizeof(buffer), format, args);
-    if (ret > 0) {
-        for (int i = 0; i < ret && buffer[i] != '\0'; i++) {
-            ITM_SendChar(buffer[i]);
-        }
-    }
-    va_end(args);
-
-    return ret;
-}
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 /* CAN Interrupt Callback */
-void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
-{
-  uint8_t RxData[8];
-
-  if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
-  {
-    HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &clCAN.stVar.stCanRxMsg.RxHeader, RxData);
-    if (clCAN.stVar.stCanRxMsg.RxHeader.IdType == FDCAN_STANDARD_ID)
-    {
-      clCAN.stVar.stCanRxMsg.u32CanId = clCAN.stVar.stCanRxMsg.RxHeader.Identifier;
-      clCAN.stVar.stCanRxMsg.u32CanDlc = (clCAN.stVar.stCanRxMsg.RxHeader.DataLength == FDCAN_DLC_BYTES_8) ? 8u : clCAN.stVar.stCanRxMsg.RxHeader.DataLength;
-
-      for (uint8_t idx=0; idx<8u; ++idx)
-      {
-        clCAN.stVar.stCanRxMsg.u8CanData[idx] = RxData[idx];
-      }
-
-      // Increment the receive count
-      clCAN.stVar.stCanRxMsg.u64RxSentCounter++;
-
-      // Re-Enable RX Interrupt
-      HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
-    }
-  }
-}
-void HAL_FDCAN_TxFifoEmptyCallback(FDCAN_HandleTypeDef *hfdcan)
-{
-  ++clCAN.stVar.stCanTxMsg.u64TxSentCounter;
-}
 /* USER CODE END 0 */
 
 /**
@@ -605,20 +560,12 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
-  clCAN.stVar.stCanTxMsg.u32CanId=0x123;
-  clCAN.stVar.stCanTxMsg.u32CanDlc=0x8;
-  clCAN.stVar.stCanTxMsg.u8CanData[0]=0x88;
-  clCAN.stVar.stCanTxMsg.u8CanData[1]=0x99;
-  clCAN.stVar.stCanTxMsg.u8CanData[2]=0xAA;
-  clCAN.stVar.stCanTxMsg.u8CanData[3]=0xBB;
-  clCAN.stVar.stCanTxMsg.u8CanData[4]=0xCC;
-  clCAN.stVar.stCanTxMsg.u8CanData[5]=0xDD;
-  clCAN.stVar.stCanTxMsg.u8CanData[6]=0xEE;
-  clCAN.stVar.stCanTxMsg.u8CanData[7]=0xFF;
+  int ctr=0;
+  clSWV.SWV_Print("From Default Task\n");
   /* Infinite loop */
   for(;;)
   {
-    clCAN.CAN_AddTxMessage(&clCAN.stVar.stCanTxMsg);
+    clSWV.SWV_Print("ctr%d\n",ctr++);
     osDelay(500);
   }
   /* USER CODE END 5 */
