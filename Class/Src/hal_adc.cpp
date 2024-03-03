@@ -38,9 +38,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// Instance Declaration
-ADC_CLASS clADC;
-
 ADC_CLASS::ADC_CLASS() {
     // Initialize all PinConfig in stDIn with HAL_PIN_LOW
     for (int i = 0; i < ADC_PIN_MaxCnt; i++) {

@@ -31,11 +31,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-/* USER CODE END ET */
-
-/* Global variable -----------------------------------------------------------*/
-/* USER CODE BEGIN GV */
-class RTC_CLASS
+typedef class RTC_CLASS
 {
 	public:
 		// Internal Declaration
@@ -62,8 +58,8 @@ class RTC_CLASS
 		// Methods Declaration
 		HAL_ApiState RTC_vSetTimeDate();
 		HAL_ApiState RTC_vGetTimeDate();
-};
-/* USER CODE END GV */
+}RTC_CLASS;
+/* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */

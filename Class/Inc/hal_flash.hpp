@@ -35,11 +35,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-/* USER CODE END ET */
-
-/* Global variable -----------------------------------------------------------*/
-/* USER CODE BEGIN GV */
-class FLASH_CLASS
+typedef class FLASH_CLASS
 {
 	public:
 		// Internal Declaration
@@ -65,8 +61,8 @@ class FLASH_CLASS
 		HAL_ApiState FLASH_MemWriteData(const uint32_t u32MemAdd, uint8_t *pData, uint16_t u16DataLen);
 		HAL_ApiState FLASH_MemReadData(const uint32_t u32MemAdd, uint8_t *pData, uint16_t u16DataLen);
 
-};
-/* USER CODE END GV */
+}FLASH_CLASS;
+/* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */

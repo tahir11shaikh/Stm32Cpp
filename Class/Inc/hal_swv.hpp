@@ -31,11 +31,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-/* USER CODE END ET */
-
-/* Global variable -----------------------------------------------------------*/
-/* USER CODE BEGIN GV */
-class SWV_CLASS
+typedef class SWV_CLASS
 {
 	public:
 		// Internal Declaration
@@ -44,8 +40,8 @@ class SWV_CLASS
 
 		// Methods Declaration
 		uint32_t SWV_Print(const char *format, ...);
-};
-/* USER CODE END GV */
+}SWV_CLASS;
+/* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */

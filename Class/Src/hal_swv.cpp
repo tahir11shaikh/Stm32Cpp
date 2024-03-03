@@ -40,9 +40,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// Instance Declaration
-SWV_CLASS clSWV;
-
 SWV_CLASS::SWV_CLASS() {
 	// TODO Auto-generated constructor stub
 }

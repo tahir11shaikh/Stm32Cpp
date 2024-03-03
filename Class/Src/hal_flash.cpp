@@ -38,9 +38,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// Instance Declaration
-FLASH_CLASS clFLASH;
-
 FLASH_CLASS::FLASH_CLASS() {
 	// TODO Auto-generated constructor stub
 }

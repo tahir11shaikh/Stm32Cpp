@@ -41,11 +41,8 @@ typedef struct CanMsg_st
   FDCAN_TxHeaderTypeDef TxHeader;
   FDCAN_RxHeaderTypeDef RxHeader;
 } CanMsg_st_t;
-/* USER CODE END ET */
 
-/* Global variable -----------------------------------------------------------*/
-/* USER CODE BEGIN GV */
-class CAN_CLASS
+typedef class CAN_CLASS
 {
 	public:
 		// Internal Declaration
@@ -74,8 +71,8 @@ class CAN_CLASS
 		HAL_ApiState CAN_ActivateTxNotification(void);
 		HAL_ApiState CAN_ActivateRxNotification(void);
 		HAL_ApiState CAN_AddTxMessage(CanMsg_st_t *stCanTxMsg);
-};
-/* USER CODE END GV */
+}CAN_CLASS;
+/* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */

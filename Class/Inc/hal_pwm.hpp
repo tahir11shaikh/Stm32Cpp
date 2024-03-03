@@ -39,11 +39,8 @@ typedef enum
 
 	PWM_PIN_MaxCnt,
 } PWM_PinTypeDef;
-/* USER CODE END ET */
 
-/* Global variable -----------------------------------------------------------*/
-/* USER CODE BEGIN GV */
-class PWM_CLASS
+typedef class PWM_CLASS
 {
 	public:
 		// Internal Declaration
@@ -66,8 +63,8 @@ class PWM_CLASS
 		HAL_ApiState PWM_Start(PWM_PinTypeDef enPinTypeDef);
 		HAL_ApiState PWM_Stop(PWM_PinTypeDef enPinTypeDef);
 		HAL_ApiState PWM_SetDutyCycle(PWM_PinTypeDef enPinTypeDef, uint8_t ucDutyCycle);
-};
-/* USER CODE END GV */
+}PWM_CLASS;
+/* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */

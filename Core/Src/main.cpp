@@ -22,13 +22,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <hal_swv.hpp>
-#include <hal_gpio.hpp>
-#include <hal_adc.hpp>
-#include <hal_pwm.hpp>
-#include <hal_rtc.hpp>
-#include <hal_flash.hpp>
-#include <hal_canfd.hpp>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,13 +54,6 @@ osThreadId myTask02Handle;
 osMutexId myMutex01Handle;
 osMutexId myMutex02Handle;
 /* USER CODE BEGIN PV */
-extern SWV_CLASS clSWV;
-extern GPIO_CLASS clGPIO;
-extern ADC_CLASS clADC;
-extern PWM_CLASS clPWM;
-extern RTC_CLASS clRTC;
-extern FLASH_CLASS clFLASH;
-extern CAN_CLASS clCAN;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,10 +109,6 @@ int main(void)
   MX_RTC_Init();
   MX_FDCAN1_Init();
   /* USER CODE BEGIN 2 */
-  clCAN.CAN_Start();
-  clCAN.CAN_FilterConfig();
-  clCAN.CAN_ActivateTxNotification();
-  clCAN.CAN_ActivateRxNotification();
   /* USER CODE END 2 */
 
   /* Create the mutex(es) */
@@ -560,12 +542,9 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
-  int ctr=0;
-  clSWV.SWV_Print("From Default Task\n");
   /* Infinite loop */
   for(;;)
   {
-    clSWV.SWV_Print("ctr%d\n",ctr++);
     osDelay(500);
   }
   /* USER CODE END 5 */

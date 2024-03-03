@@ -38,9 +38,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// Instance Declaration
-CAN_CLASS clCAN;
-
 CAN_CLASS::CAN_CLASS() {
 	// TODO Auto-generated constructor stub
 }

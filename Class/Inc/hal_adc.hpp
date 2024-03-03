@@ -37,11 +37,8 @@ typedef enum
 
 	ADC_PIN_MaxCnt,
 } ADC_PinTypeDef;
-/* USER CODE END ET */
 
-/* Global variable -----------------------------------------------------------*/
-/* USER CODE BEGIN GV */
-class ADC_CLASS
+typedef class ADC_CLASS
 {
 	public:
 		// Internal Declaration
@@ -76,8 +73,8 @@ class ADC_CLASS
 		HAL_FunState ADC_StartDMA(void);
 		uint32_t ADC_ReadSingleChannelDMA(ADC_PinTypeDef enPinTypeDef);
 		uint32_t ADC_ReadSingleChannelPoll(ADC_PinTypeDef enPinTypeDef);
-};
-/* USER CODE END GV */
+}ADC_CLASS;
+/* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */

@@ -38,9 +38,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// Instance Declaration
-RTC_CLASS clRTC;
-
 RTC_CLASS::RTC_CLASS() {
 	// TODO Auto-generated constructor stub
 }

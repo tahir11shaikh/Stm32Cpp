@@ -39,8 +39,6 @@
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 // Instance Declaration
-PWM_CLASS clPWM;
-
 PWM_CLASS::PWM_CLASS() {
 	// TODO Auto-generated constructor stub
 }

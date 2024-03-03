@@ -38,9 +38,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// Instance Declaration
-GPIO_CLASS clGPIO;
-
 GPIO_CLASS::GPIO_CLASS() {
     // Initialize all PinConfig in stDIn with HAL_PIN_LOW
     for (int i = 0; i < GPI_PIN_MaxCnt; i++) {

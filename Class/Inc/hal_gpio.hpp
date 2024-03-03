@@ -44,11 +44,8 @@ typedef enum
 
 	GPO_PIN_MaxCnt,
 } GPO_PinTypeDef;
-/* USER CODE END ET */
 
-/* Global variable -----------------------------------------------------------*/
-/* USER CODE BEGIN GV */
-class GPIO_CLASS
+typedef class GPIO_CLASS
 {
 	public:
 		// Internal Declaration
@@ -73,8 +70,8 @@ class GPIO_CLASS
 		HAL_PinState GPO_PinSetLevel(GPO_PinTypeDef enPinTypeDef, HAL_PinState enPinState);
 		HAL_PinState GPO_PinToggle(GPO_PinTypeDef enPinTypeDef);
 		HAL_PinState GPI_PinGetLevel(GPI_PinTypeDef enPinTypeDef);
-};
-/* USER CODE END GV */
+}GPIO_CLASS;
+/* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */
