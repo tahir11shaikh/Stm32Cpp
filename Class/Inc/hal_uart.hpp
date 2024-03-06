@@ -1,8 +1,8 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : hal_i2c.hpp
-  * Created on      : 03-03-2024
+  * @file           : hal_uart.hpp
+  * Created on      : 04-03-2024
   * Author          : Tahir.Shaikh
   * @brief          : Source/Header file
   ******************************************************************************
@@ -10,8 +10,8 @@
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef CLASS_INC_HAL_I2C_H_
-#define CLASS_INC_HAL_I2C_H_
+#ifndef CLASS_INC_HAL_UART_H_
+#define CLASS_INC_HAL_UART_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,31 +31,33 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-typedef class I2C_CLASS
+typedef class UART_CLASS
 {
     public:
         // Internal Declaration
-        explicit I2C_CLASS(I2C_HandleTypeDef *hi2c);
-        virtual ~I2C_CLASS();
+        explicit UART_CLASS(UART_HandleTypeDef *huart);
+        virtual ~UART_CLASS();
 
         // Variable Declaration
         struct
         {
-            HAL_ApiState enMemWrite,enMemWriteIT,enMemWriteDMA;
-            HAL_ApiState enMemRead,enMemReadIT,enMemReadDMA;
+            HAL_ApiState enTx,enTxIT,enTxDMA;
+            HAL_ApiState enRx,enRxIT,enRxDMA;
         } stStatus;
 
         // Methods Declaration
-        HAL_ApiState I2C_MemWrite(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t u16Data);
-        HAL_ApiState I2C_MemWrite_IT(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t u16Data);
-        HAL_ApiState I2C_MemWrite_DMA(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t u16Data);
+        HAL_ApiState UART_Transmit(const uint8_t *pData, uint16_t Size);
+        HAL_ApiState UART_Transmit_IT(const uint8_t *pData, uint16_t Size);
+        HAL_ApiState UART_Transmit_DMA(const uint8_t *pData, uint16_t Size);
 
-        HAL_ApiState I2C_MemRead(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t *p16Data);
-        HAL_ApiState I2C_MemRead_IT(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t *p16Data);
-        HAL_ApiState I2C_MemRead_DMA(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t *p16Data);
+        HAL_ApiState UART_Receive(uint8_t *pData, uint16_t Size);
+        HAL_ApiState UART_Receive_IT(uint8_t *pData, uint16_t Size);
+        HAL_ApiState UART_Receive_DMA(uint8_t *pData, uint16_t Size);
+
+        uint32_t UART_TransmitMsg(const char *format, ...);
     private:
-        I2C_HandleTypeDef *hi2c;
-} I2C_CLASS;
+        UART_HandleTypeDef *huart;
+} UART_CLASS;
 /* USER CODE END ET */
 
 /* Exported functions prototypes ---------------------------------------------*/
@@ -66,4 +68,4 @@ typedef class I2C_CLASS
 }
 #endif
 
-#endif /* CLASS_INC_HAL_I2C_H_ */
+#endif /* CLASS_INC_HAL_UART_H_ */

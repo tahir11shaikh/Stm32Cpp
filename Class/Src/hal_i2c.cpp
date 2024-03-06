@@ -80,6 +80,48 @@ HAL_ApiState I2C_CLASS::I2C_MemWrite(uint16_t u16DevAddr, uint16_t u16MemAddr, u
 }
 
 /**
+  * @brief  This function is used to write data on memory register
+  * @param  uint16_t, uint16_t, uint8_t*
+  * @retval HAL_ApiState
+  */
+HAL_ApiState I2C_CLASS::I2C_MemWrite_IT(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t u16Data)
+{
+    uint8_t p8Data[2];
+
+    p8Data[0] = (u16Data >> 8) & 0xFF; // MSB
+    p8Data[1] = u16Data & 0xFF;        // LSB
+
+    // I2C Mem Write
+    if (HAL_I2C_Mem_Write_IT(this->hi2c, u16DevAddr<<1, u16MemAddr, I2C_MEMADD_SIZE_8BIT, p8Data, 2) != HAL_OK)
+    {
+        return this->stStatus.enMemWriteIT = HAL_FAIL;
+    } else {
+        return this->stStatus.enMemWriteIT = HAL_SUCCESS;
+    }
+}
+
+/**
+  * @brief  This function is used to write data on memory register
+  * @param  uint16_t, uint16_t, uint8_t*
+  * @retval HAL_ApiState
+  */
+HAL_ApiState I2C_CLASS::I2C_MemWrite_DMA(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t u16Data)
+{
+    uint8_t p8Data[2];
+
+    p8Data[0] = (u16Data >> 8) & 0xFF; // MSB
+    p8Data[1] = u16Data & 0xFF;        // LSB
+
+    // I2C Mem Write
+    if (HAL_I2C_Mem_Write_DMA(this->hi2c, u16DevAddr<<1, u16MemAddr, I2C_MEMADD_SIZE_8BIT, p8Data, 2) != HAL_OK)
+    {
+        return this->stStatus.enMemWriteDMA = HAL_FAIL;
+    } else {
+        return this->stStatus.enMemWriteDMA = HAL_SUCCESS;
+    }
+}
+
+/**
   * @brief  This function is used to read data from memory register
   * @param  uint16_t, uint16_t, uint8_t*
   * @retval HAL_ApiState
@@ -98,3 +140,40 @@ HAL_ApiState I2C_CLASS::I2C_MemRead(uint16_t u16DevAddr, uint16_t u16MemAddr, ui
     }
 }
 
+/**
+  * @brief  This function is used to read data from memory register
+  * @param  uint16_t, uint16_t, uint8_t*
+  * @retval HAL_ApiState
+  */
+HAL_ApiState I2C_CLASS::I2C_MemRead_IT(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t *p16Data)
+{
+    uint8_t p8Data[2];
+
+    // I2C Mem Read
+    if (HAL_I2C_Mem_Read_IT(this->hi2c, u16DevAddr<<1, u16MemAddr, I2C_MEMADD_SIZE_8BIT, p8Data, 2) != HAL_OK)
+    {
+        return this->stStatus.enMemReadIT = HAL_FAIL;
+    } else {
+        *p16Data = ((p8Data[0] << 8) | p8Data[1]);
+        return this->stStatus.enMemReadIT = HAL_SUCCESS;
+    }
+}
+
+/**
+  * @brief  This function is used to read data from memory register
+  * @param  uint16_t, uint16_t, uint8_t*
+  * @retval HAL_ApiState
+  */
+HAL_ApiState I2C_CLASS::I2C_MemRead_DMA(uint16_t u16DevAddr, uint16_t u16MemAddr, uint16_t *p16Data)
+{
+    uint8_t p8Data[2];
+
+    // I2C Mem Read
+    if (HAL_I2C_Mem_Read_DMA(this->hi2c, u16DevAddr<<1, u16MemAddr, I2C_MEMADD_SIZE_8BIT, p8Data, 2) != HAL_OK)
+    {
+        return this->stStatus.enMemReadDMA = HAL_FAIL;
+    } else {
+        *p16Data = ((p8Data[0] << 8) | p8Data[1]);
+        return this->stStatus.enMemReadDMA = HAL_SUCCESS;
+    }
+}
